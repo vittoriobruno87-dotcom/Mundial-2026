@@ -1,110 +1,184 @@
-// ============================================================
-// PAGINA PRINCIPALE
-// ============================================================
+# ⚽ Mundial 2026 – Gioco Amici
 
-'use client';
+App mobile-first per gestire il gioco tra amici basato sui risultati del Mondiale 2026.  
+Installabile come PWA su iPhone e Android.
 
-import { useState } from 'react';
-import { useGameStore } from '@/store/gameStore';
-import { RankingTab } from '@/components/features/RankingTab';
-import { MatchesTab } from '@/components/features/MatchesTab';
-import { StatsTab } from '@/components/features/StatsTab';
+---
 
-type Tab = 'ranking' | 'matches' | 'stats';
+## 🚀 Avvio rapido
 
-export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<Tab>('ranking');
-  const { isLoading, lastUpdated } = useGameStore();
+```bash
+# 1. Installa le dipendenze
+npm install
 
-  return (
-    <div className="min-h-screen" style={{ background: 'var(--bg)', paddingBottom: '80px' }}>
+# 2. Copia le variabili d'ambiente
+cp .env.example .env.local
 
-      {/* Header */}
-      <header style={{
-        background: 'linear-gradient(135deg, #0A0E1A 0%, #1a1040 100%)',
-        borderBottom: '1px solid var(--border)',
-      }}>
-        <div className="flex items-center justify-between px-4 pt-12 pb-0">
-          <h1 className="font-display text-2xl tracking-widest">
-            ⚽ MUNDIAL <span style={{ color: 'var(--gold)' }}>2026</span>
-          </h1>
-          <div className="flex items-center gap-2">
-            {isLoading && (
-              <span className="text-[10px] text-[var(--muted)]">Aggiornamento…</span>
-            )}
-            {!isLoading && (
-              <span className="text-[10px] px-2 py-1 rounded-full font-semibold animate-pulse-dot"
-                style={{ background: 'rgba(255,59,48,0.15)', color: '#FF6B6B' }}>
-                ● LIVE
-              </span>
-            )}
-          </div>
-        </div>
+# 3. Avvia in sviluppo
+npm run dev
+```
 
-        {lastUpdated && (
-          <p className="px-4 text-[10px] text-[var(--muted)] pb-1">
-            Aggiornato: {lastUpdated.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
-          </p>
-        )}
+Apri [http://localhost:3000](http://localhost:3000) dal browser.
 
-        {/* Tab nav top */}
-        <div className="flex">
-          {(['ranking', 'matches', 'stats'] as Tab[]).map(tab => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className="flex-1 py-3 text-sm font-medium transition-all duration-200"
-              style={{
-                background: 'none',
-                border: 'none',
-                borderBottom: activeTab === tab
-                  ? '2px solid var(--gold)'
-                  : '2px solid transparent',
-                color: activeTab === tab ? 'var(--gold)' : 'var(--muted)',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-body)',
-              }}
-            >
-              {tab === 'ranking' ? 'Classifica' : tab === 'matches' ? 'Partite' : 'Stats'}
-            </button>
-          ))}
-        </div>
-      </header>
+---
 
-      {/* Content */}
-      <main className="pt-4">
-        {activeTab === 'ranking' && <RankingTab />}
-        {activeTab === 'matches' && <MatchesTab />}
-        {activeTab === 'stats' && <StatsTab />}
-      </main>
+## 📁 Struttura del progetto
 
-      {/* Bottom nav (mobile) */}
-      <nav className="fixed bottom-0 left-0 right-0 flex"
-        style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
-        {[
-          { id: 'ranking', label: 'Classifica', icon: '🏆' },
-          { id: 'matches', label: 'Partite', icon: '⚽' },
-          { id: 'stats', label: 'Stats', icon: '📊' },
-        ].map(item => (
-          <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id as Tab)}
-            className="flex-1 flex flex-col items-center gap-1 py-2 transition-all duration-200"
-            style={{
-              background: 'none',
-              border: 'none',
-              color: activeTab === item.id ? 'var(--gold)' : 'var(--muted)',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-body)',
-              fontSize: '10px',
-              fontWeight: activeTab === item.id ? 600 : 400,
-            }}
-          >
-            <span style={{ fontSize: '20px' }}>{item.icon}</span>
-            {item.label}
-          </button>
-        ))}
-      </nav>
-    </div>
-  );
+```
+src/
+├── app/
+│   ├── layout.tsx          # Layout root + metadata PWA
+│   ├── page.tsx            # Pagina principale + navigazione
+│   └── globals.css         # Stili globali + variabili CSS
+├── components/
+│   └── features/
+│       ├── RankingTab.tsx  # Classifica con podio e dettaglio
+│       ├── MatchesTab.tsx  # Lista partite con status
+│       └── StatsTab.tsx    # Statistiche e barre progresso
+├── lib/
+│   ├── gameData.ts         # 🔑 Dati: team, coefficienti, risultati, partite
+│   └── scoring.ts          # 🔑 Logica calcolo punteggi
+├── hooks/
+│   └── useFootballData.ts  # Hook aggiornamento via API o mock
+└── store/
+    └── gameStore.ts        # Stato globale (Zustand)
+public/
+└── manifest.json           # PWA manifest
+```
+
+---
+
+## 🔑 File chiave da modificare
+
+### `src/lib/gameData.ts`
+Contiene **tutti i dati del gioco**:
+- `COEFFICIENTS` — coefficienti per nazionali
+- `SQUAD_RESULTS` — risultati aggiornati di ogni squadra
+- `TEAMS` — i 3 team partecipanti con le loro nazionali
+- `MATCHES` — partite con risultati
+
+**Per aggiornare un risultato manualmente:**
+```ts
+// In SQUAD_RESULTS modifica il record della squadra
+'Brasile': { wins: 4, draws: 0, losses: 0, groupWin: true, advance: true },
+```
+
+### `src/lib/scoring.ts`
+Logica pura di calcolo — non modificare salvo cambio regole.
+
+```ts
+// Formula applicata:
+const matchPoints = wins * 3 + draws * 1;
+const bonus = (groupWin ? 1.5 : 0) + (advance ? 3 : 0);
+const finalScore = (matchPoints + bonus) * coefficient;
+```
+
+---
+
+## 🌐 Integrazione API reale (API-Football)
+
+1. Registrati su [api-football.com](https://www.api-football.com) (piano Free gratuito)
+2. Copia la chiave API in `.env.local`:
+   ```
+   NEXT_PUBLIC_API_FOOTBALL_KEY=la_tua_chiave
+   ```
+3. Quando inizia il torneo (giugno 2026), recupera l'ID del Mondiale:
+   ```bash
+   curl "https://v3.football.api-sports.io/leagues?name=World+Cup&season=2026" \
+     -H "x-apisports-key: LA_TUA_CHIAVE"
+   ```
+4. Aggiorna `NEXT_PUBLIC_WORLD_CUP_ID` e il dizionario `mapApiIdToInternal` in `useFootballData.ts`
+
+L'hook si aggiorna automaticamente ogni 5 minuti. Senza chiave API, i dati mock rimangono attivi.
+
+---
+
+## 📦 Deploy su Vercel (consigliato)
+
+```bash
+# Installa Vercel CLI
+npm i -g vercel
+
+# Deploy (segui le istruzioni)
+vercel
+
+# Per i successivi deploy
+vercel --prod
+```
+
+Oppure collega il repository GitHub a [vercel.com](https://vercel.com) per deploy automatici ad ogni push.
+
+**Variabili d'ambiente su Vercel:**  
+Dashboard → Project → Settings → Environment Variables  
+Aggiungi `NEXT_PUBLIC_API_FOOTBALL_KEY`
+
+---
+
+## 📦 Deploy su Netlify
+
+```bash
+npm run build
+# Cartella di output: .next  (oppure `out` se usi output: 'export')
+```
+
+Su Netlify: New site → Import from Git → Build command: `npm run build` → Publish directory: `.next`
+
+---
+
+## 📱 Installare come PWA (iPhone)
+
+1. Apri l'URL del sito su **Safari**
+2. Tocca il tasto **Condividi** (quadrato con freccia in alto)
+3. Scorri e tocca **"Aggiungi alla schermata Home"**
+4. Dai un nome e tocca **Aggiungi**
+
+L'app apparirà come icona nativa sulla home, senza barra URL.
+
+## 📱 Installare come PWA (Android Chrome)
+
+1. Apri l'URL su **Chrome**
+2. Tocca i **tre puntini** → **"Aggiungi alla schermata Home"**  
+   (oppure comparirà in automatico il banner di installazione)
+3. Tocca **Installa**
+
+---
+
+## ➕ Aggiungere un nuovo team
+
+In `src/lib/gameData.ts`, aggiungi un oggetto a `TEAMS`:
+
+```ts
+{
+  id: 4,
+  name: "Nuovo Team",
+  players: "Mario & Luigi",
+  color: "#9C27B0",
+  squads: ['Argentina', 'Croazia', 'Ecuador', 'Tunisia'],
 }
+```
+
+Il calcolo della classifica si aggiorna automaticamente.
+
+---
+
+## 🛠 Stack tecnologico
+
+| Tecnologia | Scopo |
+|---|---|
+| Next.js 14 (App Router) | Framework React con SSR/SSG |
+| TypeScript | Type safety |
+| Tailwind CSS | Styling utility-first |
+| Zustand | State management leggero |
+| Google Fonts (Bebas Neue + DM Sans) | Tipografia display |
+| API-Football v3 | Dati live (opzionale) |
+| PWA Manifest | Installabilità mobile |
+
+---
+
+## 🗺 Roadmap futura
+
+- [ ] Pagina admin per aggiornare risultati senza toccare il codice
+- [ ] Notifiche push per gol e fischio finale
+- [ ] Storico turno per turno
+- [ ] Condivisione classifica via link/immagine
+- [ ] Firebase Realtime DB per sync multi-device
