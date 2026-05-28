@@ -3,7 +3,7 @@
 App mobile-first per gestire il gioco tra amici basato sui risultati del Mondiale 2026.  
 Installabile come PWA su iPhone e Android.
 
----
+\---
 
 ## 🚀 Avvio rapido
 
@@ -20,7 +20,7 @@ npm run dev
 
 Apri [http://localhost:3000](http://localhost:3000) dal browser.
 
----
+\---
 
 ## 📁 Struttura del progetto
 
@@ -46,52 +46,60 @@ public/
 └── manifest.json           # PWA manifest
 ```
 
----
+\---
 
 ## 🔑 File chiave da modificare
 
 ### `src/lib/gameData.ts`
+
 Contiene **tutti i dati del gioco**:
-- `COEFFICIENTS` — coefficienti per nazionali
-- `SQUAD_RESULTS` — risultati aggiornati di ogni squadra
-- `TEAMS` — i 3 team partecipanti con le loro nazionali
-- `MATCHES` — partite con risultati
+
+* `COEFFICIENTS` — coefficienti per nazionali
+* `SQUAD\\\_RESULTS` — risultati aggiornati di ogni squadra
+* `TEAMS` — i 3 team partecipanti con le loro nazionali
+* `MATCHES` — partite con risultati
 
 **Per aggiornare un risultato manualmente:**
+
 ```ts
-// In SQUAD_RESULTS modifica il record della squadra
+// In SQUAD\\\_RESULTS modifica il record della squadra
 'Brasile': { wins: 4, draws: 0, losses: 0, groupWin: true, advance: true },
 ```
 
 ### `src/lib/scoring.ts`
+
 Logica pura di calcolo — non modificare salvo cambio regole.
 
 ```ts
 // Formula applicata:
-const matchPoints = wins * 3 + draws * 1;
+const matchPoints = wins \\\* 3 + draws \\\* 1;
 const bonus = (groupWin ? 1.5 : 0) + (advance ? 3 : 0);
-const finalScore = (matchPoints + bonus) * coefficient;
+const finalScore = (matchPoints + bonus) \\\* coefficient;
 ```
 
----
+\---
 
 ## 🌐 Integrazione API reale (API-Football)
 
 1. Registrati su [api-football.com](https://www.api-football.com) (piano Free gratuito)
 2. Copia la chiave API in `.env.local`:
+
+```
+   NEXT\\\_PUBLIC\\\_API\\\_FOOTBALL\\\_KEY=la\\\_tua\\\_chiave
    ```
-   NEXT_PUBLIC_API_FOOTBALL_KEY=la_tua_chiave
-   ```
+
 3. Quando inizia il torneo (giugno 2026), recupera l'ID del Mondiale:
-   ```bash
-   curl "https://v3.football.api-sports.io/leagues?name=World+Cup&season=2026" \
-     -H "x-apisports-key: LA_TUA_CHIAVE"
+
+```bash
+   curl "https://v3.football.api-sports.io/leagues?name=World+Cup\\\&season=2026" \\\\
+     -H "x-apisports-key: LA\\\_TUA\\\_CHIAVE"
    ```
-4. Aggiorna `NEXT_PUBLIC_WORLD_CUP_ID` e il dizionario `mapApiIdToInternal` in `useFootballData.ts`
+
+4. Aggiorna `NEXT\\\_PUBLIC\\\_WORLD\\\_CUP\\\_ID` e il dizionario `mapApiIdToInternal` in `useFootballData.ts`
 
 L'hook si aggiorna automaticamente ogni 5 minuti. Senza chiave API, i dati mock rimangono attivi.
 
----
+\---
 
 ## 📦 Deploy su Vercel (consigliato)
 
@@ -110,9 +118,9 @@ Oppure collega il repository GitHub a [vercel.com](https://vercel.com) per deplo
 
 **Variabili d'ambiente su Vercel:**  
 Dashboard → Project → Settings → Environment Variables  
-Aggiungi `NEXT_PUBLIC_API_FOOTBALL_KEY`
+Aggiungi `NEXT\\\_PUBLIC\\\_API\\\_FOOTBALL\\\_KEY`
 
----
+\---
 
 ## 📦 Deploy su Netlify
 
@@ -123,7 +131,7 @@ npm run build
 
 Su Netlify: New site → Import from Git → Build command: `npm run build` → Publish directory: `.next`
 
----
+\---
 
 ## 📱 Installare come PWA (iPhone)
 
@@ -138,10 +146,10 @@ L'app apparirà come icona nativa sulla home, senza barra URL.
 
 1. Apri l'URL su **Chrome**
 2. Tocca i **tre puntini** → **"Aggiungi alla schermata Home"**  
-   (oppure comparirà in automatico il banner di installazione)
+(oppure comparirà in automatico il banner di installazione)
 3. Tocca **Installa**
 
----
+\---
 
 ## ➕ Aggiungere un nuovo team
 
@@ -151,34 +159,37 @@ In `src/lib/gameData.ts`, aggiungi un oggetto a `TEAMS`:
 {
   id: 4,
   name: "Nuovo Team",
-  players: "Mario & Luigi",
+  players: "Mario \\\& Luigi",
   color: "#9C27B0",
-  squads: ['Argentina', 'Croazia', 'Ecuador', 'Tunisia'],
+  squads: \\\['Argentina', 'Croazia', 'Ecuador', 'Tunisia'],
 }
 ```
 
 Il calcolo della classifica si aggiorna automaticamente.
 
----
+\---
 
 ## 🛠 Stack tecnologico
 
-| Tecnologia | Scopo |
-|---|---|
-| Next.js 14 (App Router) | Framework React con SSR/SSG |
-| TypeScript | Type safety |
-| Tailwind CSS | Styling utility-first |
-| Zustand | State management leggero |
-| Google Fonts (Bebas Neue + DM Sans) | Tipografia display |
-| API-Football v3 | Dati live (opzionale) |
-| PWA Manifest | Installabilità mobile |
+|Tecnologia|Scopo|
+|-|-|
+|Next.js 14 (App Router)|Framework React con SSR/SSG|
+|TypeScript|Type safety|
+|Tailwind CSS|Styling utility-first|
+|Zustand|State management leggero|
+|Google Fonts (Bebas Neue + DM Sans)|Tipografia display|
+|API-Football v3|Dati live (opzionale)|
+|PWA Manifest|Installabilità mobile|
 
----
+\---
 
 ## 🗺 Roadmap futura
 
-- [ ] Pagina admin per aggiornare risultati senza toccare il codice
-- [ ] Notifiche push per gol e fischio finale
-- [ ] Storico turno per turno
-- [ ] Condivisione classifica via link/immagine
-- [ ] Firebase Realtime DB per sync multi-device
+* \[ ] Pagina admin per aggiornare risultati senza toccare il codice
+* \[ ] Notifiche push per gol e fischio finale
+* \[ ] Storico turno per turno
+* \[ ] Condivisione classifica via link/immagine
+* \[ ] Firebase Realtime DB per sync multi-device
+
+
+
