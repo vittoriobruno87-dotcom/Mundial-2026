@@ -69,20 +69,20 @@ export const FLAGS: Record<NationName, string> = {
   'Uruguay': '🇺🇾', 'Colombia': '🇨🇴', 'Olanda': '🇳🇱',
 };
 
-// Risultati squadre (aggiornare in tempo reale o via API)
+// Risultati squadre — tutti a zero, si aggiornano via pagina admin
 export const SQUAD_RESULTS: Record<NationName, SquadResult> = {
-  'Canada':    { wins: 0, draws: 0, losses: 3, groupWin: false, advance: false },
-  'Spagna':    { wins: 2, draws: 1, losses: 0, groupWin: true,  advance: true  },
-  'Giappone':  { wins: 1, draws: 1, losses: 1, groupWin: false, advance: false },
-  'Marocco':   { wins: 2, draws: 0, losses: 1, groupWin: false, advance: true  },
-  'Messico':   { wins: 1, draws: 0, losses: 2, groupWin: false, advance: false },
-  'Germania':  { wins: 2, draws: 1, losses: 0, groupWin: true,  advance: true  },
-  'Svizzera':  { wins: 1, draws: 1, losses: 1, groupWin: false, advance: false },
-  'Brasile':   { wins: 3, draws: 0, losses: 0, groupWin: true,  advance: true  },
-  'USA':       { wins: 1, draws: 1, losses: 1, groupWin: false, advance: false },
-  'Portogallo':{ wins: 2, draws: 1, losses: 0, groupWin: true,  advance: true  },
-  'Norvegia':  { wins: 0, draws: 1, losses: 2, groupWin: false, advance: false },
-  'Belgio':    { wins: 2, draws: 0, losses: 1, groupWin: false, advance: true  },
+  'Canada':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Spagna':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Giappone':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Marocco':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Messico':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Germania':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Svizzera':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Brasile':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'USA':       { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Portogallo':{ wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Norvegia':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Belgio':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
 };
 
 // Team partecipanti al gioco
@@ -110,19 +110,15 @@ export const TEAMS: Team[] = [
   },
 ];
 
-// Partite (dati mock - sostituire con API reale)
+// Partite — vuote, si popolano con l'API o manualmente
 export const MATCHES: Match[] = [
-  { id: 1,  group: 'Gruppo A', home: 'Spagna',    away: 'Marocco',   homeScore: 2, awayScore: 1, status: 'FT',   date: '12 Giu' },
-  { id: 2,  group: 'Gruppo A', home: 'Spagna',    away: 'Canada',    homeScore: 3, awayScore: 0, status: 'FT',   date: '16 Giu' },
-  { id: 3,  group: 'Gruppo A', home: 'Marocco',   away: 'Canada',    homeScore: 1, awayScore: 0, status: 'FT',   date: '20 Giu' },
-  { id: 4,  group: 'Gruppo B', home: 'Brasile',   away: 'Germania',  homeScore: 2, awayScore: 1, status: 'FT',   date: '13 Giu' },
-  { id: 5,  group: 'Gruppo B', home: 'Germania',  away: 'Svizzera',  homeScore: 3, awayScore: 2, status: 'FT',   date: '17 Giu' },
-  { id: 6,  group: 'Gruppo B', home: 'Brasile',   away: 'Svizzera',  homeScore: 2, awayScore: 0, status: 'FT',   date: '21 Giu' },
-  { id: 7,  group: 'Gruppo C', home: 'Portogallo',away: 'Norvegia',  homeScore: 2, awayScore: 2, status: 'FT',   date: '14 Giu' },
-  { id: 8,  group: 'Gruppo C', home: 'Belgio',    away: 'USA',       homeScore: 1, awayScore: 1, status: 'FT',   date: '14 Giu' },
-  { id: 9,  group: 'Gruppo C', home: 'Portogallo',away: 'Belgio',    homeScore: 2, awayScore: 1, status: 'FT',   date: '18 Giu' },
-  { id: 10, group: 'Ottavi',   home: 'Spagna',    away: 'USA',       homeScore: null, awayScore: null, status: 'NS',   date: '28 Giu' },
-  { id: 11, group: 'Ottavi',   home: 'Brasile',   away: 'Belgio',    homeScore: null, awayScore: null, status: 'LIVE', date: 'Oggi', minute: 67 },
-  { id: 12, group: 'Ottavi',   home: 'Germania',  away: 'Marocco',   homeScore: null, awayScore: null, status: 'NS',   date: '29 Giu' },
-  { id: 13, group: 'Ottavi',   home: 'Portogallo',away: 'Messico',   homeScore: null, awayScore: null, status: 'NS',   date: '29 Giu' },
+  { id: 1,  group: 'Gruppo A', home: 'Spagna',    away: 'Marocco',    homeScore: null, awayScore: null, status: 'NS', date: '12 Giu' },
+  { id: 2,  group: 'Gruppo A', home: 'Spagna',    away: 'Canada',     homeScore: null, awayScore: null, status: 'NS', date: '16 Giu' },
+  { id: 3,  group: 'Gruppo A', home: 'Marocco',   away: 'Canada',     homeScore: null, awayScore: null, status: 'NS', date: '20 Giu' },
+  { id: 4,  group: 'Gruppo B', home: 'Brasile',   away: 'Germania',   homeScore: null, awayScore: null, status: 'NS', date: '13 Giu' },
+  { id: 5,  group: 'Gruppo B', home: 'Germania',  away: 'Svizzera',   homeScore: null, awayScore: null, status: 'NS', date: '17 Giu' },
+  { id: 6,  group: 'Gruppo B', home: 'Brasile',   away: 'Svizzera',   homeScore: null, awayScore: null, status: 'NS', date: '21 Giu' },
+  { id: 7,  group: 'Gruppo C', home: 'Portogallo',away: 'Norvegia',   homeScore: null, awayScore: null, status: 'NS', date: '14 Giu' },
+  { id: 8,  group: 'Gruppo C', home: 'Belgio',    away: 'USA',        homeScore: null, awayScore: null, status: 'NS', date: '14 Giu' },
+  { id: 9,  group: 'Gruppo C', home: 'Portogallo',away: 'Belgio',     homeScore: null, awayScore: null, status: 'NS', date: '18 Giu' },
 ];
