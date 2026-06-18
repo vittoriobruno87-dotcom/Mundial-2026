@@ -34,7 +34,7 @@ export const SQUAD_RESULTS: Record<NationName, SquadResult> = {
   'Svizzera':  { wins: 0, draws: 1, losses: 0, groupWin: false, advance: false },
   'Brasile':   { wins: 0, draws: 1, losses: 0, groupWin: false, advance: false },
   'USA':       { wins: 1, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Portogallo':{ wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Portogallo':{ wins: 0, draws: 1, losses: 0, groupWin: false, advance: false },
   'Norvegia':  { wins: 1, draws: 0, losses: 0, groupWin: false, advance: false },
   'Belgio':    { wins: 0, draws: 1, losses: 0, groupWin: false, advance: false },
 };
