@@ -1,7 +1,3 @@
-// ============================================================
-// API ROUTE: Salva risultati direttamente su GitHub
-// Il file gameData.ts viene aggiornato → Vercel rideploya
-// ============================================================
 import { NextResponse } from 'next/server';
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN ?? '';
@@ -17,7 +13,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // 1. Leggi il file attuale da GitHub per ottenere lo SHA
     const getRes = await fetch(
       `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`,
       { headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: 'application/vnd.github+json' } }
@@ -26,14 +21,12 @@ export async function POST(req: Request) {
     const sha = fileData.sha;
     const currentContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
 
-    // 2. Sostituisci solo il blocco SQUAD_RESULTS nel file
     const newBlock = buildSquadResultsBlock(squadResults);
     const updatedContent = currentContent.replace(
       /export const SQUAD_RESULTS[\s\S]*?^};/m,
       newBlock
     );
 
-    // 3. Scrivi il file aggiornato su GitHub
     const updateRes = await fetch(
       `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`,
       {
@@ -61,7 +54,7 @@ export async function POST(req: Request) {
 function buildSquadResultsBlock(results: Record<string, any>): string {
   const lines = Object.entries(results).map(([nation, r]: [string, any]) => {
     const pad = nation.length < 10 ? ' '.repeat(10 - nation.length) : '';
-    return `  '${nation}':${pad}{ wins: ${r.wins}, draws: ${r.draws}, losses: ${r.losses}, groupWin: ${r.groupWin}, advance: ${r.advance} },`;
+    return `  '${nation}':${pad}{ wins: ${r.wins}, draws: ${r.draws}, losses: ${r.losses}, groupWin: ${r.groupWin}, advance: ${r.advance}, finalist: ${r.finalist ?? false}, champion: ${r.champion ?? false} },`;
   });
   return `export const SQUAD_RESULTS: Record<NationName, SquadResult> = {\n${lines.join('\n')}\n};`;
 }

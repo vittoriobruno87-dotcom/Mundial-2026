@@ -1,8 +1,17 @@
 export type NationName = string;
-export interface SquadResult { wins: number; draws: number; losses: number; groupWin: boolean; advance: boolean; }
+export interface SquadResult {
+  wins: number;
+  draws: number;
+  losses: number;
+  groupWin: boolean;
+  advance: boolean;
+  finalist: boolean;
+  champion: boolean;
+}
 export interface Squad { name: NationName; flag: string; coefficient: number; result: SquadResult; }
 export interface Team { id: number; name: string; players: string; color: string; squads: NationName[]; }
 export interface Match { id: number; group: string; home: NationName; away: NationName; homeScore: number | null; awayScore: number | null; status: 'FT' | 'LIVE' | 'NS'; date: string; minute?: number; }
+
 export const COEFFICIENTS: Record<NationName, number> = {
   'Argentina': 1.5, 'Brasile': 1.5, 'Francia': 1.5, 'Inghilterra': 1.5,
   'Spagna': 2.0, 'Germania': 2.0, 'Portogallo': 2.0, 'Olanda': 2.0, 'Belgio': 2.0,
@@ -11,6 +20,7 @@ export const COEFFICIENTS: Record<NationName, number> = {
   'Australia': 6.0, 'Qatar': 6.0, 'Arabia Saudita': 6.0, 'Panama': 6.0, "Costa d'Avorio": 6.0, 'Egitto': 6.0, 'Algeria': 6.0, 'Ghana': 6.0, 'Sudafrica': 6.0, 'Tunisia': 6.0, 'Bosnia': 6.0, 'Iraq': 6.0,
   'Canada': 10.0, 'Uzbekistan': 10.0, 'Giordania': 10.0, 'Capo Verde': 10.0, 'Curacao': 10.0, 'Haiti': 10.0, 'Nuova Zelanda': 10.0, 'RD Congo': 10.0,
 };
+
 export const FLAGS: Record<NationName, string> = {
   'Canada': '🇨🇦', 'Spagna': '🇪🇸', 'Giappone': '🇯🇵', 'Marocco': '🇲🇦',
   'Messico': '🇲🇽', 'Germania': '🇩🇪', 'Svizzera': '🇨🇭', 'Brasile': '🇧🇷',
@@ -24,25 +34,28 @@ export const FLAGS: Record<NationName, string> = {
   'Arabia Saudita': '🇸🇦', 'Iraq': '🇮🇶', 'Senegal': '🇸🇳', 'RD Congo': '🇨🇩',
   'Uzbekistan': '🇺🇿', 'Rep. Ceca': '🇨🇿', 'Corea del Sud': '🇰🇷',
 };
+
 export const SQUAD_RESULTS: Record<NationName, SquadResult> = {
-  'Canada':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Spagna':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Giappone':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Marocco':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Messico':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Germania':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Svizzera':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Brasile':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
-  'USA':       { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Portogallo':{ wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Norvegia':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Belgio':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Canada':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Spagna':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Giappone':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Marocco':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Messico':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Germania':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Svizzera':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Brasile':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'USA':       { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Portogallo':{ wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Norvegia':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Belgio':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
 };
+
 export const TEAMS: Team[] = [
   { id: 1, name: "Varrà un Molino?", players: "Andrea & Ciccio", color: "#F5A623", squads: ['Canada', 'Spagna', 'Giappone', 'Marocco'] },
   { id: 2, name: "Non dire Gatto…", players: "Vittorio & Peppe", color: "#00C853", squads: ['Messico', 'Germania', 'Svizzera', 'Brasile'] },
   { id: 3, name: "Bedbanny FC", players: "Corrado & Gigi", color: "#2196F3", squads: ['USA', 'Portogallo', 'Norvegia', 'Belgio'] },
 ];
+
 export const MATCHES: Match[] = [
   { id: 1,  group: 'Gruppo A', home: 'Messico',    away: 'Sudafrica',      homeScore: null, awayScore: null, status: 'NS', date: '11 Giu 21:00' },
   { id: 2,  group: 'Gruppo A', home: 'Messico',    away: 'Corea del Sud',  homeScore: null, awayScore: null, status: 'NS', date: '19 Giu 03:00' },

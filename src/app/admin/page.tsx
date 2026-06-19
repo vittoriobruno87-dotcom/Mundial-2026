@@ -9,7 +9,11 @@ function calcRanking(results: Record<string, SquadResult>) {
     const total = team.squads.reduce((sum, nation) => {
       const r = results[nation];
       if (!r) return sum;
-      const pts = (r.wins * 3 + r.draws) + (r.groupWin ? 1.5 : 0) + (r.advance ? 3 : 0);
+      const pts = (r.wins * 3 + r.draws)
+        + (r.groupWin ? 1.5 : 0)
+        + (r.advance ? 3 : 0)
+        + (r.finalist ? 5 : 0)
+        + (r.champion ? 15 : 0);
       return sum + pts * (COEFFICIENTS[nation] ?? 1);
     }, 0);
     return { team, total };
@@ -81,7 +85,6 @@ export default function AdminPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)', fontFamily: 'var(--font-body)', paddingBottom: 100 }}>
-      {/* Header */}
       <div style={{ background: 'linear-gradient(135deg, #0A0E1A 0%, #1a1040 100%)', borderBottom: '1px solid var(--border)', padding: '48px 16px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 24, letterSpacing: 2, margin: 0 }}>⚙️ ADMIN</h1>
@@ -90,7 +93,6 @@ export default function AdminPage() {
         <a href="/" style={{ color: 'var(--gold)', fontSize: 12, textDecoration: 'none', background: 'rgba(245,166,35,0.1)', border: '1px solid rgba(245,166,35,0.3)', padding: '6px 12px', borderRadius: 20 }}>← Classifica</a>
       </div>
 
-      {/* Classifica preview */}
       <div style={{ margin: '16px 16px 0', padding: 14, background: 'var(--surface)', border: '1px solid rgba(245,166,35,0.2)', borderRadius: 12 }}>
         <p style={{ fontFamily: 'var(--font-display)', fontSize: 13, letterSpacing: 1, color: 'var(--muted)', margin: '0 0 10px' }}>ANTEPRIMA CLASSIFICA</p>
         {ranking.map((r, i) => (
@@ -115,7 +117,11 @@ export default function AdminPage() {
             {team.squads.map(nation => {
               const r = results[nation];
               if (!r) return null;
-              const pts = (r.wins * 3 + r.draws) + (r.groupWin ? 1.5 : 0) + (r.advance ? 3 : 0);
+              const pts = (r.wins * 3 + r.draws)
+                + (r.groupWin ? 1.5 : 0)
+                + (r.advance ? 3 : 0)
+                + (r.finalist ? 5 : 0)
+                + (r.champion ? 15 : 0);
               const finalScore = pts * (COEFFICIENTS[nation] ?? 1);
 
               return (
@@ -144,14 +150,27 @@ export default function AdminPage() {
                     })}
                   </div>
 
-                  <div style={{ display: 'flex', gap: 8 }}>
+                  {/* Bonus fase a gironi */}
+                  <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                     <button onClick={() => update(nation, 'groupWin', !r.groupWin)}
                       style={{ flex: 1, padding: '8px 4px', borderRadius: 8, border: r.groupWin ? '1px solid rgba(245,166,35,0.6)' : '1px solid var(--border)', background: r.groupWin ? 'rgba(245,166,35,0.15)' : 'var(--surface2)', color: r.groupWin ? 'var(--gold)' : 'var(--muted)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
-                      🏆 Vince girone
+                      🏆 Vince girone <span style={{ opacity: 0.6 }}>+1.5</span>
                     </button>
                     <button onClick={() => update(nation, 'advance', !r.advance)}
                       style={{ flex: 1, padding: '8px 4px', borderRadius: 8, border: r.advance ? '1px solid rgba(0,200,83,0.6)' : '1px solid var(--border)', background: r.advance ? 'rgba(0,200,83,0.15)' : 'var(--surface2)', color: r.advance ? 'var(--accent)' : 'var(--muted)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
-                      ⬆ Passa turno
+                      ⬆ Passa turno <span style={{ opacity: 0.6 }}>+3</span>
+                    </button>
+                  </div>
+
+                  {/* Bonus fase finale - NUOVO */}
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button onClick={() => update(nation, 'finalist', !r.finalist)}
+                      style={{ flex: 1, padding: '8px 4px', borderRadius: 8, border: r.finalist ? '1px solid rgba(33,150,243,0.6)' : '1px solid var(--border)', background: r.finalist ? 'rgba(33,150,243,0.15)' : 'var(--surface2)', color: r.finalist ? '#2196F3' : 'var(--muted)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                      🥈 Finalista <span style={{ opacity: 0.6 }}>+5</span>
+                    </button>
+                    <button onClick={() => update(nation, 'champion', !r.champion)}
+                      style={{ flex: 1, padding: '8px 4px', borderRadius: 8, border: r.champion ? '1px solid rgba(255,215,0,0.7)' : '1px solid var(--border)', background: r.champion ? 'rgba(255,215,0,0.2)' : 'var(--surface2)', color: r.champion ? '#FFD700' : 'var(--muted)', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
+                      🏆 CAMPIONE <span style={{ opacity: 0.6 }}>+15</span>
                     </button>
                   </div>
                 </div>
@@ -161,7 +180,6 @@ export default function AdminPage() {
         ))}
       </div>
 
-      {/* Bottone SALVA fisso in basso */}
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, padding: '12px 16px', background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
         <button onClick={saveAll} disabled={status === 'saving'}
           style={{

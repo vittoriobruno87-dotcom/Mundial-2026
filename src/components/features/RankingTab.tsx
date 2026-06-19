@@ -1,7 +1,3 @@
-// ============================================================
-// COMPONENTE: Classifica
-// ============================================================
-
 'use client';
 
 import { useState } from 'react';
@@ -16,20 +12,16 @@ export function RankingTab() {
   const toggle = (id: number) => setExpanded(prev => prev === id ? null : id);
 
   const medalColors = ['#F5A623', '#A8A8A8', '#CD7F32'];
-  const medals = ['🥇', '🥈', '🥉'];
 
-  // Podio
   const [first, second, third] = [ranking[0], ranking[1], ranking[2]];
 
   return (
     <div className="px-4 pb-6">
 
-      {/* Podio */}
       {first && (
         <div className="mb-6">
           <p className="font-display text-sm tracking-widest text-[var(--muted)] mb-3">Podio</p>
           <div className="flex items-end justify-center gap-2">
-            {/* 2° posto */}
             {second && (
               <div className="flex flex-col items-center gap-1 flex-1">
                 <span className="text-xs text-center text-[var(--text)] font-medium leading-tight">
@@ -44,7 +36,6 @@ export function RankingTab() {
                 <span className="text-lg">🥈</span>
               </div>
             )}
-            {/* 1° posto */}
             <div className="flex flex-col items-center gap-1 flex-1">
               <span className="text-xs text-center text-[var(--text)] font-medium leading-tight">
                 {first.team.name.length > 12 ? first.team.name.slice(0, 12) + '…' : first.team.name}
@@ -57,7 +48,6 @@ export function RankingTab() {
               </div>
               <span className="text-lg">🥇</span>
             </div>
-            {/* 3° posto */}
             {third && (
               <div className="flex flex-col items-center gap-1 flex-1">
                 <span className="text-xs text-center text-[var(--text)] font-medium leading-tight">
@@ -76,7 +66,6 @@ export function RankingTab() {
         </div>
       )}
 
-      {/* Lista dettagliata */}
       <p className="font-display text-sm tracking-widest text-[var(--muted)] mb-3">Dettaglio</p>
       {ranking.map((ts, idx) => {
         const isOpen = expanded === ts.team.id;
@@ -91,7 +80,6 @@ export function RankingTab() {
             }}
             onClick={() => toggle(ts.team.id)}
           >
-            {/* Header card */}
             <div className="flex items-center gap-3 p-4">
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center font-display text-base flex-shrink-0"
@@ -113,7 +101,6 @@ export function RankingTab() {
               <span className="text-[var(--muted)] text-sm ml-1">{isOpen ? '▲' : '▼'}</span>
             </div>
 
-            {/* Dettaglio squadre */}
             {isOpen && (
               <div className="px-4 pb-4 pt-1 border-t border-[var(--border)] animate-fade-in-up">
                 {ts.squads.map(sq => (
@@ -141,6 +128,18 @@ export function RankingTab() {
                             ⬆ +3
                           </span>
                         )}
+                        {sq.hasFinalistBonus && (
+                          <span className="text-[10px] px-2 py-0.5 rounded"
+                            style={{ background: 'rgba(33,150,243,0.1)', color: '#2196F3', border: '1px solid rgba(33,150,243,0.3)' }}>
+                            🥈 +5
+                          </span>
+                        )}
+                        {sq.hasChampionBonus && (
+                          <span className="text-[10px] px-2 py-0.5 rounded font-semibold"
+                            style={{ background: 'rgba(255,215,0,0.15)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.4)' }}>
+                            🏆 CAMPIONE +15
+                          </span>
+                        )}
                       </div>
                     </div>
                     <span className="font-display text-xl" style={{ color: 'var(--accent)' }}>
@@ -149,7 +148,6 @@ export function RankingTab() {
                   </div>
                 ))}
 
-                {/* Totale team */}
                 <div className="flex justify-between items-center mt-3 pt-2">
                   <span className="text-xs text-[var(--muted)]">Punteggio totale</span>
                   <span className="font-display text-2xl text-[var(--gold)]">
