@@ -27,10 +27,10 @@ export const FLAGS: Record<NationName, string> = {
 export const SQUAD_RESULTS: Record<NationName, SquadResult> = {
   'Canada':    { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false },
   'Spagna':    { wins: 0, draws: 1, losses: 0, groupWin: false, advance: false },
-  'Giappone':  { wins: 0, draws: 1, losses: 0, groupWin: false, advance: false },
+  'Giappone':  { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false },
   'Marocco':   { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false },
   'Messico':   { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Germania':  { wins: 1, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Germania':  { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false },
   'Svizzera':  { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false },
   'Brasile':   { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false },
   'USA':       { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false },
