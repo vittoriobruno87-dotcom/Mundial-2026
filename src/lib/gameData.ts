@@ -26,7 +26,7 @@ export const FLAGS: Record<NationName, string> = {
 };
 export const SQUAD_RESULTS: Record<NationName, SquadResult> = {
   'Canada':    { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false },
-  'Spagna':    { wins: 0, draws: 1, losses: 0, groupWin: false, advance: false },
+  'Spagna':    { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false },
   'Giappone':  { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false },
   'Marocco':   { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false },
   'Messico':   { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false },
@@ -36,7 +36,7 @@ export const SQUAD_RESULTS: Record<NationName, SquadResult> = {
   'USA':       { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false },
   'Portogallo':{ wins: 0, draws: 1, losses: 0, groupWin: false, advance: false },
   'Norvegia':  { wins: 1, draws: 0, losses: 0, groupWin: false, advance: false },
-  'Belgio':    { wins: 0, draws: 1, losses: 0, groupWin: false, advance: false },
+  'Belgio':    { wins: 0, draws: 2, losses: 0, groupWin: false, advance: false },
 };
 export const TEAMS: Team[] = [
   { id: 1, name: "Varrà un Molino?", players: "Andrea & Ciccio", color: "#F5A623", squads: ['Canada', 'Spagna', 'Giappone', 'Marocco'] },
