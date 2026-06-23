@@ -1,7 +1,3 @@
-// ============================================================
-// COMPONENTE: Stats
-// ============================================================
-
 'use client';
 
 import { useGameStore } from '@/store/gameStore';
@@ -19,7 +15,6 @@ export function StatsTab() {
   return (
     <div className="px-4 pb-6">
 
-      {/* Stat cards */}
       <p className="font-display text-sm tracking-widest text-[var(--muted)] mb-3">Panoramica</p>
       <div className="grid grid-cols-2 gap-3 mb-6">
         {[
@@ -37,7 +32,6 @@ export function StatsTab() {
         ))}
       </div>
 
-      {/* Barre rendimento */}
       <p className="font-display text-sm tracking-widest text-[var(--muted)] mb-3">Rendimento Team</p>
       {ranking.map((ts, i) => {
         const pct = Math.round((ts.totalScore / maxScore) * 100);
@@ -53,12 +47,10 @@ export function StatsTab() {
                 {formatScore(ts.totalScore)}
               </span>
             </div>
-            {/* Progress bar */}
             <div className="h-1.5 rounded-full mb-3" style={{ background: 'var(--surface2)' }}>
               <div className="h-full rounded-full transition-all duration-700"
                 style={{ width: `${pct}%`, background: teamColors[i] }} />
             </div>
-            {/* Squadre mini */}
             <div className="flex justify-between">
               {ts.squads.map(sq => (
                 <div key={sq.nation} className="flex flex-col items-center gap-1 flex-1">
@@ -66,7 +58,7 @@ export function StatsTab() {
                   <span className="font-display text-sm" style={{ color: teamColors[i] }}>
                     {formatScore(sq.finalScore)}
                   </span>
-                  {(sq.hasGroupBonus || sq.hasAdvanceBonus) && (
+                  {(sq.hasGroupBonus || sq.hasAdvanceBonus || sq.hasFinalistBonus || sq.hasChampionBonus) && (
                     <span className="text-[8px] text-[var(--accent)]">★</span>
                   )}
                 </div>
@@ -76,7 +68,6 @@ export function StatsTab() {
         );
       })}
 
-      {/* Legenda coefficienti */}
       <p className="font-display text-sm tracking-widest text-[var(--muted)] mb-3 mt-4">Coefficienti</p>
       <div className="rounded-xl p-4" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
         {[
@@ -97,15 +88,16 @@ export function StatsTab() {
         ))}
       </div>
 
-      {/* Regole bonus */}
       <div className="rounded-xl p-4 mt-3 text-sm"
         style={{ background: 'rgba(245,166,35,0.05)', border: '1px solid rgba(245,166,35,0.15)' }}>
         <p className="font-semibold mb-2">📐 Formula punteggio</p>
         <p className="text-xs text-[var(--muted)] leading-relaxed">
           (Punti partite + bonus) × coefficiente<br />
           Vittoria = 3pt · Pareggio = 1pt<br />
-          🏆 Vittoria girone = +1.5pt<br />
-          ⬆ Passaggio turno = +3pt
+          🏆 Vittoria girone = +3pt<br />
+          ⬆ Passaggio turno = +3pt<br />
+          🥈 Finalista = +5pt<br />
+          🏆 Campione = +15pt
         </p>
       </div>
     </div>
