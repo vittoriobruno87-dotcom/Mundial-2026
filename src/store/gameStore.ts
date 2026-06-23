@@ -17,7 +17,7 @@ function buildRanking(squadResults: Record<NationName, SquadResult>): TeamScore[
       const coeff = COEFFICIENTS[nation] ?? 1;
       if (!r) return { nation, coefficient: coeff, matchPoints: 0, bonusPoints: 0, totalBeforeCoeff: 0, finalScore: 0, hasGroupBonus: false, hasAdvanceBonus: false, hasFinalistBonus: false, hasChampionBonus: false };
       const matchPoints = r.wins * 3 + r.draws;
-      const bonusPoints = (r.groupWin ? 1.5 : 0) + (r.advance ? 3 : 0) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
+      const bonusPoints = (r.groupWin ? 3 : 0) + (r.advance ? 3 : 0) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0); // <-- groupWin aggiornato da 1.5 a 3
       const finalScore = (matchPoints + bonusPoints) * coeff;
       return { nation, coefficient: coeff, matchPoints, bonusPoints, totalBeforeCoeff: matchPoints + bonusPoints, finalScore, hasGroupBonus: r.groupWin, hasAdvanceBonus: r.advance, hasFinalistBonus: r.finalist, hasChampionBonus: r.champion };
     });

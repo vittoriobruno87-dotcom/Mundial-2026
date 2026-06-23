@@ -35,7 +35,7 @@ export function calcSquadScore(nation: NationName, result?: SquadResult): SquadS
 
   const matchPoints = r.wins * 3 + r.draws * 1;
   let bonusPoints = 0;
-  if (r.groupWin) bonusPoints += 1.5;
+  if (r.groupWin) bonusPoints += 3;      // <-- aggiornato da 1.5 a 3
   if (r.advance) bonusPoints += 3;
   if (r.finalist) bonusPoints += 5;
   if (r.champion) bonusPoints += 15;

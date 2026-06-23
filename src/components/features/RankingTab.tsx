@@ -119,7 +119,7 @@ export function RankingTab() {
                         {sq.hasGroupBonus && (
                           <span className="text-[10px] px-2 py-0.5 rounded"
                             style={{ background: 'rgba(245,166,35,0.1)', color: 'var(--gold)', border: '1px solid rgba(245,166,35,0.3)' }}>
-                            🏆 +1.5
+                            🏆 +3
                           </span>
                         )}
                         {sq.hasAdvanceBonus && (

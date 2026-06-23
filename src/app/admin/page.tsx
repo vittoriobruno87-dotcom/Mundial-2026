@@ -10,7 +10,7 @@ function calcRanking(results: Record<string, SquadResult>) {
       const r = results[nation];
       if (!r) return sum;
       const pts = (r.wins * 3 + r.draws)
-        + (r.groupWin ? 1.5 : 0)
+        + (r.groupWin ? 3 : 0)
         + (r.advance ? 3 : 0)
         + (r.finalist ? 5 : 0)
         + (r.champion ? 15 : 0);
@@ -118,7 +118,7 @@ export default function AdminPage() {
               const r = results[nation];
               if (!r) return null;
               const pts = (r.wins * 3 + r.draws)
-                + (r.groupWin ? 1.5 : 0)
+                + (r.groupWin ? 3 : 0)
                 + (r.advance ? 3 : 0)
                 + (r.finalist ? 5 : 0)
                 + (r.champion ? 15 : 0);
@@ -150,11 +150,10 @@ export default function AdminPage() {
                     })}
                   </div>
 
-                  {/* Bonus fase a gironi */}
                   <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                     <button onClick={() => update(nation, 'groupWin', !r.groupWin)}
                       style={{ flex: 1, padding: '8px 4px', borderRadius: 8, border: r.groupWin ? '1px solid rgba(245,166,35,0.6)' : '1px solid var(--border)', background: r.groupWin ? 'rgba(245,166,35,0.15)' : 'var(--surface2)', color: r.groupWin ? 'var(--gold)' : 'var(--muted)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
-                      🏆 Vince girone <span style={{ opacity: 0.6 }}>+1.5</span>
+                      🏆 Vince girone <span style={{ opacity: 0.6 }}>+3</span>
                     </button>
                     <button onClick={() => update(nation, 'advance', !r.advance)}
                       style={{ flex: 1, padding: '8px 4px', borderRadius: 8, border: r.advance ? '1px solid rgba(0,200,83,0.6)' : '1px solid var(--border)', background: r.advance ? 'rgba(0,200,83,0.15)' : 'var(--surface2)', color: r.advance ? 'var(--accent)' : 'var(--muted)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
@@ -162,7 +161,6 @@ export default function AdminPage() {
                     </button>
                   </div>
 
-                  {/* Bonus fase finale - NUOVO */}
                   <div style={{ display: 'flex', gap: 8 }}>
                     <button onClick={() => update(nation, 'finalist', !r.finalist)}
                       style={{ flex: 1, padding: '8px 4px', borderRadius: 8, border: r.finalist ? '1px solid rgba(33,150,243,0.6)' : '1px solid var(--border)', background: r.finalist ? 'rgba(33,150,243,0.15)' : 'var(--surface2)', color: r.finalist ? '#2196F3' : 'var(--muted)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
