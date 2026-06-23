@@ -35,7 +35,7 @@ export const SQUAD_RESULTS: Record<NationName, SquadResult> = {
   'Brasile':   { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false },
   'USA':       { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false },
   'Portogallo':{ wins: 0, draws: 1, losses: 0, groupWin: false, advance: false },
-  'Norvegia':  { wins: 1, draws: 0, losses: 0, groupWin: false, advance: false },
+  'Norvegia':  { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false },
   'Belgio':    { wins: 0, draws: 2, losses: 0, groupWin: false, advance: false },
 };
 export const TEAMS: Team[] = [
