@@ -36,18 +36,18 @@ export const FLAGS: Record<NationName, string> = {
 };
 
 export const SQUAD_RESULTS: Record<NationName, SquadResult> = {
-  'Canada':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
-  'Spagna':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
-  'Giappone':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
-  'Marocco':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
-  'Messico':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
-  'Germania':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
-  'Svizzera':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
-  'Brasile':   { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
-  'USA':       { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
-  'Portogallo':{ wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
-  'Norvegia':  { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
-  'Belgio':    { wins: 0, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Canada':    { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Spagna':    { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Giappone':  { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Marocco':   { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Messico':   { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Germania':  { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Svizzera':  { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Brasile':   { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'USA':       { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Portogallo':{ wins: 0, draws: 1, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Norvegia':  { wins: 2, draws: 0, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Belgio':    { wins: 0, draws: 2, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
 };
 
 export const TEAMS: Team[] = [
