@@ -92,8 +92,9 @@ export function StatsTab() {
         style={{ background: 'rgba(245,166,35,0.05)', border: '1px solid rgba(245,166,35,0.15)' }}>
         <p className="font-semibold mb-2">📐 Formula punteggio</p>
         <p className="text-xs text-[var(--muted)] leading-relaxed">
-          (Punti partite + bonus) × coefficiente<br />
+          (Punti partite × coefficiente) + bonus<br />
           Vittoria = 3pt · Pareggio = 1pt<br />
+          <span style={{ opacity: 0.7 }}>I bonus sotto NON sono moltiplicati per il coefficiente:</span><br />
           🏆 Vittoria girone = +3pt<br />
           ⬆ Passaggio turno = +3pt<br />
           🥈 Finalista = +5pt<br />

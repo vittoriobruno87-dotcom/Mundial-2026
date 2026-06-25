@@ -9,12 +9,10 @@ function calcRanking(results: Record<string, SquadResult>) {
     const total = team.squads.reduce((sum, nation) => {
       const r = results[nation];
       if (!r) return sum;
-      const pts = (r.wins * 3 + r.draws)
-        + (r.groupWin ? 3 : 0)
-        + (r.advance ? 3 : 0)
-        + (r.finalist ? 5 : 0)
-        + (r.champion ? 15 : 0);
-      return sum + pts * (COEFFICIENTS[nation] ?? 1);
+      const matchPts = r.wins * 3 + r.draws;
+      const bonus = (r.groupWin ? 3 : 0) + (r.advance ? 3 : 0) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
+      const coeff = COEFFICIENTS[nation] ?? 1;
+      return sum + (matchPts * coeff) + bonus;
     }, 0);
     return { team, total };
   }).sort((a, b) => b.total - a.total);
@@ -117,12 +115,10 @@ export default function AdminPage() {
             {team.squads.map(nation => {
               const r = results[nation];
               if (!r) return null;
-              const pts = (r.wins * 3 + r.draws)
-                + (r.groupWin ? 3 : 0)
-                + (r.advance ? 3 : 0)
-                + (r.finalist ? 5 : 0)
-                + (r.champion ? 15 : 0);
-              const finalScore = pts * (COEFFICIENTS[nation] ?? 1);
+              const matchPts = r.wins * 3 + r.draws;
+              const bonus = (r.groupWin ? 3 : 0) + (r.advance ? 3 : 0) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
+              const coeff = COEFFICIENTS[nation] ?? 1;
+              const finalScore = (matchPts * coeff) + bonus;
 
               return (
                 <div key={nation} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 14, marginBottom: 10 }}>

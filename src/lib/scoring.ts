@@ -33,15 +33,18 @@ export function calcSquadScore(nation: NationName, result?: SquadResult): SquadS
     };
   }
 
+  // Punti partita: SOLO questi vengono moltiplicati per il coefficiente
   const matchPoints = r.wins * 3 + r.draws * 1;
+
+  // Bonus: NON moltiplicati per il coefficiente, si aggiungono a punteggio pieno
   let bonusPoints = 0;
-  if (r.groupWin) bonusPoints += 3;      // <-- aggiornato da 1.5 a 3
+  if (r.groupWin) bonusPoints += 3;
   if (r.advance) bonusPoints += 3;
   if (r.finalist) bonusPoints += 5;
   if (r.champion) bonusPoints += 15;
 
-  const totalBeforeCoeff = matchPoints + bonusPoints;
-  const finalScore = totalBeforeCoeff * coeff;
+  const totalBeforeCoeff = matchPoints + bonusPoints; // solo per visualizzazione
+  const finalScore = (matchPoints * coeff) + bonusPoints; // <-- formula aggiornata
 
   return {
     nation, coefficient: coeff, matchPoints, bonusPoints,
