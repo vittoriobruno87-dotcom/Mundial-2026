@@ -37,7 +37,7 @@ export const FLAGS: Record<NationName, string> = {
 
 export const SQUAD_RESULTS: Record<NationName, SquadResult> = {
   'Canada':    { wins: 1, draws: 1, losses: 1, groupWin: false, advance: true, finalist: false, champion: false },
-  'Spagna':    { wins: 1, draws: 1, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Spagna':    { wins: 2, draws: 1, losses: 0, groupWin: true, advance: true, finalist: false, champion: false },
   'Giappone':  { wins: 1, draws: 2, losses: 0, groupWin: false, advance: true, finalist: false, champion: false },
   'Marocco':   { wins: 2, draws: 1, losses: 0, groupWin: false, advance: true, finalist: false, champion: false },
   'Messico':   { wins: 3, draws: 0, losses: 0, groupWin: true, advance: true, finalist: false, champion: false },
@@ -47,7 +47,7 @@ export const SQUAD_RESULTS: Record<NationName, SquadResult> = {
   'USA':       { wins: 2, draws: 0, losses: 1, groupWin: true, advance: true, finalist: false, champion: false },
   'Portogallo':{ wins: 1, draws: 1, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
   'Norvegia':  { wins: 2, draws: 0, losses: 1, groupWin: false, advance: true, finalist: false, champion: false },
-  'Belgio':    { wins: 0, draws: 2, losses: 0, groupWin: false, advance: false, finalist: false, champion: false },
+  'Belgio':    { wins: 1, draws: 2, losses: 0, groupWin: true, advance: true, finalist: false, champion: false },
 };
 
 export const TEAMS: Team[] = [
