@@ -67,7 +67,7 @@ export function RankingTab() {
       )}
 
       <p className="font-display text-sm tracking-widest text-[var(--muted)] mb-3">Dettaglio</p>
-      {ranking.map((ts, idx) => {
+      {ranking.map((ts: any, idx: number) => {
         const isOpen = expanded === ts.team.id;
         return (
           <div
