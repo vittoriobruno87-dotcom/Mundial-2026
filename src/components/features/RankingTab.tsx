@@ -105,7 +105,7 @@ export function RankingTab() {
               <div className="px-4 pb-4 pt-1 border-t border-[var(--border)] animate-fade-in-up">
                 {ts.squads.map((sq: any) => (
                   <div key={sq.nation} className="flex items-center py-2 border-b border-[var(--border)] last:border-0">
-                    <span className="text-xl w-8 text-center">{FLAGS[sq.nation] ?? '🏳'}</span>
+                    <span className="text-xl w-8 text-center">{FLAGS[sq.nation as keyof typeof FLAGS] ?? '🏳'}</span>
                     <div className="flex-1 ml-2">
                       <p className="text-sm font-medium">{sq.nation}</p>
                       <div className="flex flex-wrap gap-1 mt-1">
