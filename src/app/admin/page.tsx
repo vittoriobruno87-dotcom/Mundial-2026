@@ -10,7 +10,8 @@ function calcRanking(results: Record<string, SquadResult>) {
       const r = results[nation];
       if (!r) return sum;
       const matchPts = r.wins * 3 + r.draws;
-      const bonus = (r.groupWin ? 3 : 0) + ((r.advance ?? 0) * 3) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
+      const advance = Number(r.advance ?? 0);
+      const bonus = (r.groupWin ? 3 : 0) + (advance * 3) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
       const coeff = COEFFICIENTS[nation] ?? 1;
       return sum + (matchPts * coeff) + bonus;
     }, 0);
@@ -116,7 +117,8 @@ export default function AdminPage() {
               const r = results[nation];
               if (!r) return null;
               const matchPts = r.wins * 3 + r.draws;
-              const bonus = (r.groupWin ? 3 : 0) + ((r.advance ?? 0) * 3) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
+              const advance = Number(r.advance ?? 0);
+              const bonus = (r.groupWin ? 3 : 0) + (advance * 3) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
               const coeff = COEFFICIENTS[nation] ?? 1;
               const finalScore = (matchPts * coeff) + bonus;
 
