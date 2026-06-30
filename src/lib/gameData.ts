@@ -1,5 +1,3 @@
-import { NationName, SquadResult } from './types';
-
 export type NationName = 
   | 'Canada' | 'Spagna' | 'Giappone' | 'Marocco' 
   | 'Messico' | 'Germania' | 'Svizzera' | 'Brasile' 
@@ -11,6 +9,17 @@ export interface SquadResult {
   losses: number;
   groupWin: boolean;
   advance: number;
+}
+
+export interface Match {
+  id: number;
+  homeTeam: NationName;
+  awayTeam: NationName;
+  homeScore?: number;
+  awayScore?: number;
+  status: 'NS' | 'LIVE' | 'FT';
+  date: string;
+  group: string;
 }
 
 export const FLAGS: Record<NationName, string> = {
