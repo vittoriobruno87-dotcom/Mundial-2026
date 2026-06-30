@@ -158,10 +158,10 @@ export default function AdminPage() {
                   <div style={{ textAlign: 'center', marginBottom: 8 }}>
                     <p style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 6 }}>⬆ Turni superati (+3 ciascuno)</p>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                      <button onClick={() => update(nation, 'advance', Math.max(0, (r.advance ?? 0) - 1))}
+                      <button onClick={() => update(nation, 'advance', Math.max(0, Number(r.advance ?? 0) - 1))}
                         style={{ width: 36, height: 36, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface2)', color: 'var(--text)', fontSize: 18, cursor: 'pointer' }}>−</button>
-                      <span style={{ fontFamily: 'var(--font-display)', fontSize: 26, minWidth: 36, textAlign: 'center', color: (r.advance ?? 0) > 0 ? 'var(--accent)' : 'var(--text)' }}>
-                        {r.advance ?? 0}
+                      <span style={{ fontFamily: 'var(--font-display)', fontSize: 26, minWidth: 36, textAlign: 'center', color: Number(r.advance ?? 0) > 0 ? 'var(--accent)' : 'var(--text)' }}> ? 'var(--accent)' : 'var(--text)' }}>
+                        {Number(r.advance ?? 0)}
                       </span>
                       <button onClick={() => update(nation, 'advance', Math.min(3, (r.advance ?? 0) + 1))}
                         style={{ width: 36, height: 36, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface2)', color: 'var(--text)', fontSize: 18, cursor: 'pointer' }}>+</button>
