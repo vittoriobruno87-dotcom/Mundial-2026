@@ -1,4 +1,4 @@
-import { SQUAD_RESULTS, type SquadResult, type NationName, type TeamName } from './gameData';
+import { SQUAD_RESULTS, type SquadResult, type NationName } from './gameData';
 
 // Funzione di utilità per formattare il punteggio
 export function formatScore(score: number): string {
@@ -6,16 +6,14 @@ export function formatScore(score: number): string {
 }
 
 // Trova il proprietario di una nazione partendo dai dati statici
-export function findNationOwner(nation: NationName): TeamName {
+export function findNationOwner(nation: NationName): string {
   for (const [team, data] of Object.entries(SQUAD_RESULTS)) {
-    // Cerchiamo se la nazione è presente nell'array delle squadre associate
-    // Nota: usiamo una ricerca difensiva per evitare crash in fase di build
     const squads = (data as any).squads || [];
     if (squads.includes(nation)) {
-      return team as TeamName;
+      return team;
     }
   }
-  return "Senza Proprietario" as TeamName;
+  return "Senza Proprietario";
 }
 
 export function calculateScores(results: Record<NationName, SquadResult>) {
