@@ -6,7 +6,7 @@ export interface TeamScore {
   details: Record<string, number>;
 }
 
-// Questa è la funzione richiesta per colorare i pallini delle vostre squadre
+// Funzione richiesta per colorare i pallini delle vostre squadre
 export function findNationOwner(nationName: string): string | null {
   for (const [teamName, nations] of Object.entries(TEAMS_DEFINITION)) {
     if (nations.includes(nationName)) {
@@ -14,6 +14,11 @@ export function findNationOwner(nationName: string): string | null {
     }
   }
   return null;
+}
+
+// Funzione richiesta da RankingTab.tsx per formattare il testo dei punteggi
+export function formatScore(points: number): string {
+  return `${points} pt${points !== 1 ? 's' : ''}`;
 }
 
 export function calculateScores(currentResults: typeof SQUAD_RESULTS) {
