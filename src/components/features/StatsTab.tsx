@@ -58,7 +58,7 @@ export function StatsTab() {
                   <span className="font-display text-sm" style={{ color: teamColors[i] }}>
                     {formatScore(sq.finalScore)}
                   </span>
-                  {(sq.hasGroupBonus || sq.hasAdvanceBonus || sq.hasFinalistBonus || sq.hasChampionBonus) && (
+                  {(sq.hasGroupBonus || sq.advanceCount > 0 || sq.hasFinalistBonus || sq.hasChampionBonus) && (
                     <span className="text-[8px] text-[var(--accent)]">★</span>
                   )}
                 </div>
@@ -95,8 +95,8 @@ export function StatsTab() {
           (Punti partite × coefficiente) + bonus<br />
           Vittoria = 3pt · Pareggio = 1pt<br />
           <span style={{ opacity: 0.7 }}>I bonus sotto NON sono moltiplicati per il coefficiente:</span><br />
-          🏆 Vittoria girone = +3pt<br />
-          ⬆ Passaggio turno = +3pt<br />
+          🏆 Vittoria girone = +3pt (una tantum)<br />
+          ⬆ Passaggio turno = +3pt per ogni turno superato (fino a 3 volte)<br />
           🥈 Finalista = +5pt<br />
           🏆 Campione = +15pt
         </p>

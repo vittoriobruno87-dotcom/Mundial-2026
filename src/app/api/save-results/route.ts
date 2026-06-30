@@ -54,7 +54,8 @@ export async function POST(req: Request) {
 function buildSquadResultsBlock(results: Record<string, any>): string {
   const lines = Object.entries(results).map(([nation, r]: [string, any]) => {
     const pad = nation.length < 10 ? ' '.repeat(10 - nation.length) : '';
-    return `  '${nation}':${pad}{ wins: ${r.wins}, draws: ${r.draws}, losses: ${r.losses}, groupWin: ${r.groupWin}, advance: ${r.advance}, finalist: ${r.finalist ?? false}, champion: ${r.champion ?? false} },`;
+    const advance = typeof r.advance === 'number' ? r.advance : (r.advance ? 1 : 0);
+    return `  '${nation}':${pad}{ wins: ${r.wins}, draws: ${r.draws}, losses: ${r.losses}, groupWin: ${r.groupWin}, advance: ${advance}, finalist: ${r.finalist ?? false}, champion: ${r.champion ?? false} },`;
   });
   return `export const SQUAD_RESULTS: Record<NationName, SquadResult> = {\n${lines.join('\n')}\n};`;
 }

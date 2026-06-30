@@ -10,7 +10,7 @@ function calcRanking(results: Record<string, SquadResult>) {
       const r = results[nation];
       if (!r) return sum;
       const matchPts = r.wins * 3 + r.draws;
-      const bonus = (r.groupWin ? 3 : 0) + (r.advance ? 3 : 0) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
+      const bonus = (r.groupWin ? 3 : 0) + ((r.advance ?? 0) * 3) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
       const coeff = COEFFICIENTS[nation] ?? 1;
       return sum + (matchPts * coeff) + bonus;
     }, 0);
@@ -116,7 +116,7 @@ export default function AdminPage() {
               const r = results[nation];
               if (!r) return null;
               const matchPts = r.wins * 3 + r.draws;
-              const bonus = (r.groupWin ? 3 : 0) + (r.advance ? 3 : 0) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
+              const bonus = (r.groupWin ? 3 : 0) + ((r.advance ?? 0) * 3) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
               const coeff = COEFFICIENTS[nation] ?? 1;
               const finalScore = (matchPts * coeff) + bonus;
 
@@ -151,10 +151,22 @@ export default function AdminPage() {
                       style={{ flex: 1, padding: '8px 4px', borderRadius: 8, border: r.groupWin ? '1px solid rgba(245,166,35,0.6)' : '1px solid var(--border)', background: r.groupWin ? 'rgba(245,166,35,0.15)' : 'var(--surface2)', color: r.groupWin ? 'var(--gold)' : 'var(--muted)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
                       🏆 Vince girone <span style={{ opacity: 0.6 }}>+3</span>
                     </button>
-                    <button onClick={() => update(nation, 'advance', !r.advance)}
-                      style={{ flex: 1, padding: '8px 4px', borderRadius: 8, border: r.advance ? '1px solid rgba(0,200,83,0.6)' : '1px solid var(--border)', background: r.advance ? 'rgba(0,200,83,0.15)' : 'var(--surface2)', color: r.advance ? 'var(--accent)' : 'var(--muted)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-body)' }}>
-                      ⬆ Passa turno <span style={{ opacity: 0.6 }}>+3</span>
-                    </button>
+                  </div>
+
+                  <div style={{ textAlign: 'center', marginBottom: 8 }}>
+                    <p style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 6 }}>⬆ Turni superati (+3 ciascuno)</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                      <button onClick={() => update(nation, 'advance', Math.max(0, (r.advance ?? 0) - 1))}
+                        style={{ width: 36, height: 36, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface2)', color: 'var(--text)', fontSize: 18, cursor: 'pointer' }}>−</button>
+                      <span style={{ fontFamily: 'var(--font-display)', fontSize: 26, minWidth: 36, textAlign: 'center', color: (r.advance ?? 0) > 0 ? 'var(--accent)' : 'var(--text)' }}>
+                        {r.advance ?? 0}
+                      </span>
+                      <button onClick={() => update(nation, 'advance', Math.min(3, (r.advance ?? 0) + 1))}
+                        style={{ width: 36, height: 36, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface2)', color: 'var(--text)', fontSize: 18, cursor: 'pointer' }}>+</button>
+                      <span style={{ fontSize: 11, color: 'var(--muted)', marginLeft: 4 }}>
+                        = +{(r.advance ?? 0) * 3} pt
+                      </span>
+                    </div>
                   </div>
 
                   <div style={{ display: 'flex', gap: 8 }}>

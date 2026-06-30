@@ -8,7 +8,7 @@ export interface SquadScore {
   totalBeforeCoeff: number;
   finalScore: number;
   hasGroupBonus: boolean;
-  hasAdvanceBonus: boolean;
+  advanceCount: number;
   hasFinalistBonus: boolean;
   hasChampionBonus: boolean;
 }
@@ -28,29 +28,27 @@ export function calcSquadScore(nation: NationName, result?: SquadResult): SquadS
     return {
       nation, coefficient: coeff, matchPoints: 0, bonusPoints: 0,
       totalBeforeCoeff: 0, finalScore: 0,
-      hasGroupBonus: false, hasAdvanceBonus: false,
+      hasGroupBonus: false, advanceCount: 0,
       hasFinalistBonus: false, hasChampionBonus: false,
     };
   }
 
-  // Punti partita: SOLO questi vengono moltiplicati per il coefficiente
   const matchPoints = r.wins * 3 + r.draws * 1;
 
-  // Bonus: NON moltiplicati per il coefficiente, si aggiungono a punteggio pieno
   let bonusPoints = 0;
   if (r.groupWin) bonusPoints += 3;
-  if (r.advance) bonusPoints += 3;
+  bonusPoints += (r.advance ?? 0) * 3;
   if (r.finalist) bonusPoints += 5;
   if (r.champion) bonusPoints += 15;
 
-  const totalBeforeCoeff = matchPoints + bonusPoints; // solo per visualizzazione
-  const finalScore = (matchPoints * coeff) + bonusPoints; // <-- formula aggiornata
+  const totalBeforeCoeff = matchPoints + bonusPoints;
+  const finalScore = (matchPoints * coeff) + bonusPoints;
 
   return {
     nation, coefficient: coeff, matchPoints, bonusPoints,
     totalBeforeCoeff, finalScore,
     hasGroupBonus: r.groupWin,
-    hasAdvanceBonus: r.advance,
+    advanceCount: r.advance ?? 0,
     hasFinalistBonus: r.finalist,
     hasChampionBonus: r.champion,
   };

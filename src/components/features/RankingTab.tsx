@@ -122,10 +122,10 @@ export function RankingTab() {
                             🏆 +3
                           </span>
                         )}
-                        {sq.hasAdvanceBonus && (
+                        {sq.advanceCount > 0 && (
                           <span className="text-[10px] px-2 py-0.5 rounded"
                             style={{ background: 'rgba(0,200,83,0.1)', color: 'var(--accent)', border: '1px solid rgba(0,200,83,0.3)' }}>
-                            ⬆ +3
+                            ⬆ ×{sq.advanceCount} = +{sq.advanceCount * 3}
                           </span>
                         )}
                         {sq.hasFinalistBonus && (

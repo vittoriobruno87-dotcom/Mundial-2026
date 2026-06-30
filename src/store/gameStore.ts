@@ -5,7 +5,7 @@ import { MATCHES, SQUAD_RESULTS, TEAMS, COEFFICIENTS, type Match, type NationNam
 export interface SquadScore {
   nation: NationName; coefficient: number; matchPoints: number;
   bonusPoints: number; totalBeforeCoeff: number; finalScore: number;
-  hasGroupBonus: boolean; hasAdvanceBonus: boolean;
+  hasGroupBonus: boolean; advanceCount: number;
   hasFinalistBonus: boolean; hasChampionBonus: boolean;
 }
 export interface TeamScore { team: typeof TEAMS[0]; squads: SquadScore[]; totalScore: number; rank?: number; }
@@ -15,17 +15,13 @@ function buildRanking(squadResults: Record<NationName, SquadResult>): TeamScore[
     const squads: SquadScore[] = team.squads.map(nation => {
       const r = squadResults[nation];
       const coeff = COEFFICIENTS[nation] ?? 1;
-      if (!r) return { nation, coefficient: coeff, matchPoints: 0, bonusPoints: 0, totalBeforeCoeff: 0, finalScore: 0, hasGroupBonus: false, hasAdvanceBonus: false, hasFinalistBonus: false, hasChampionBonus: false };
+      if (!r) return { nation, coefficient: coeff, matchPoints: 0, bonusPoints: 0, totalBeforeCoeff: 0, finalScore: 0, hasGroupBonus: false, advanceCount: 0, hasFinalistBonus: false, hasChampionBonus: false };
 
-      // Punti partita: SOLO questi moltiplicati per coefficiente
       const matchPoints = r.wins * 3 + r.draws;
+      const bonusPoints = (r.groupWin ? 3 : 0) + ((r.advance ?? 0) * 3) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
+      const finalScore = (matchPoints * coeff) + bonusPoints;
 
-      // Bonus: NON moltiplicati per coefficiente
-      const bonusPoints = (r.groupWin ? 3 : 0) + (r.advance ? 3 : 0) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
-
-      const finalScore = (matchPoints * coeff) + bonusPoints; // <-- formula aggiornata
-
-      return { nation, coefficient: coeff, matchPoints, bonusPoints, totalBeforeCoeff: matchPoints + bonusPoints, finalScore, hasGroupBonus: r.groupWin, hasAdvanceBonus: r.advance, hasFinalistBonus: r.finalist, hasChampionBonus: r.champion };
+      return { nation, coefficient: coeff, matchPoints, bonusPoints, totalBeforeCoeff: matchPoints + bonusPoints, finalScore, hasGroupBonus: r.groupWin, advanceCount: r.advance ?? 0, hasFinalistBonus: r.finalist, hasChampionBonus: r.champion };
     });
     return { team, squads, totalScore: squads.reduce((s, q) => s + q.finalScore, 0) };
   }).sort((a, b) => b.totalScore - a.totalScore).map((ts, i) => ({ ...ts, rank: i + 1 }));
