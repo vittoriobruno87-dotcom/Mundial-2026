@@ -6,11 +6,21 @@ export interface TeamScore {
   details: Record<string, number>;
 }
 
+// Questa è la funzione richiesta per colorare i pallini delle vostre squadre
+export function findNationOwner(nationName: string): string | null {
+  for (const [teamName, nations] of Object.entries(TEAMS_DEFINITION)) {
+    if (nations.includes(nationName)) {
+      return teamName;
+    }
+  }
+  return null;
+}
+
 export function calculateScores(currentResults: typeof SQUAD_RESULTS) {
   const POINTS_PER_WIN = 3;
   const POINTS_PER_DRAW = 1;
   const BONUS_GROUP_WIN = 5;
-  const BONUS_ADVANCE = 3; // Punti per CASCUN passaggio del turno
+  const BONUS_ADVANCE = 3; // Punti per CIASCUN passaggio del turno
 
   const scores: Record<string, TeamScore> = {};
 
