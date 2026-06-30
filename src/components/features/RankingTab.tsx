@@ -103,7 +103,7 @@ export function RankingTab() {
 
             {isOpen && (
               <div className="px-4 pb-4 pt-1 border-t border-[var(--border)] animate-fade-in-up">
-                {ts.squads.map(sq => (
+                {ts.squads.map((sq: any) => (
                   <div key={sq.nation} className="flex items-center py-2 border-b border-[var(--border)] last:border-0">
                     <span className="text-xl w-8 text-center">{FLAGS[sq.nation] ?? '🏳'}</span>
                     <div className="flex-1 ml-2">
