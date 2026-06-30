@@ -6,9 +6,11 @@ interface GameState {
   results: Record<NationName, SquadResult>;
   ranking: any;
   matches: any[];
-  isLoading: boolean; // Aggiunto per fixare la riga 14 di page.tsx
-  lastUpdated: string | null; // Aggiunto per fixare la riga 14 di page.tsx
+  isLoading: boolean;
+  lastUpdated: string | null;
   updateSquadField: (nation: NationName, field: keyof SquadResult, value: any) => void;
+  updateSquadResult: (nation: NationName, updatedData: SquadResult) => void; // Aggiunto alias per useFootballData.ts
+  updateMatch: (matchId: number, updatedFields: any) => void; // Aggiunto per evitare errori futuri su updateMatch
   setLoading: (loading: boolean) => void;
   setLastUpdated: (dateStr: string) => void;
   resetToZero: () => void;
@@ -31,8 +33,8 @@ export const useGameStore = create<GameState>((set) => {
     results: startingResults,
     ranking: calculateScores(startingResults),
     matches: [],
-    isLoading: false, // Stato iniziale
-    lastUpdated: null, // Stato iniziale
+    isLoading: false,
+    lastUpdated: null,
     
     updateSquadField: (nation, field, value) => set((state) => {
       const updatedSquad = { ...state.results[nation], [field]: value };
@@ -46,6 +48,24 @@ export const useGameStore = create<GameState>((set) => {
         results: updatedResults,
         ranking: calculateScores(updatedResults)
       };
+    }),
+
+    // Implementazione dell'alias richiesto alla riga 18 di useFootballData.ts
+    updateSquadResult: (nation, updatedData) => set((state) => {
+      const updatedResults = { ...state.results, [nation]: updatedData };
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('mundial_squad_results', JSON.stringify(updatedResults));
+      }
+      return {
+        results: updatedResults,
+        ranking: calculateScores(updatedResults)
+      };
+    }),
+
+    // Semplice mock per updateMatch richiesto da useFootballData per evitare errori di compilazione
+    updateMatch: (matchId, updatedFields) => set((state) => {
+      const updatedMatches = state.matches.map(m => m.id === matchId ? { ...m, ...updatedFields } : m);
+      return { matches: updatedMatches };
     }),
 
     setLoading: (loading) => set({ isLoading: loading }),
