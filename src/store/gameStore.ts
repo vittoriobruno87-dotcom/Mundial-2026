@@ -1,90 +1,63 @@
+'use client';
 import { create } from 'zustand';
-import { SQUAD_RESULTS, SQUAD_RESULTS as initialResults, type SquadResult, type NationName } from '@/lib/gameData';
-import { calculateScores } from '@/lib/scoring';
+import { MATCHES, SQUAD_RESULTS, TEAMS, COEFFICIENTS, type Match, type NationName, type SquadResult } from '@/lib/gameData';
 
-interface GameState {
-  results: Record<NationName, SquadResult>;
-  ranking: any;
-  matches: any[];
-  isLoading: boolean;
-  lastUpdated: string | null;
-  updateSquadField: (nation: NationName, field: keyof SquadResult, value: any) => void;
-  updateSquadResult: (nation: NationName, updatedData: Partial<SquadResult>) => void; // Cambiato in Partial per accettare dati parziali dalle API
-  updateMatch: (matchId: number, homeScore: number, awayScore: number, status: 'NS' | 'LIVE' | 'FT') => void;
-  setLoading: (loading: boolean) => void;
-  setLastUpdated: (dateStr: any) => void;
-  resetToZero: () => void;
+export interface SquadScore {
+  nation: NationName; coefficient: number; matchPoints: number;
+  bonusPoints: number; totalBeforeCoeff: number; finalScore: number;
+  hasGroupBonus: boolean; advanceCount: number;
+  hasFinalistBonus: boolean; hasChampionBonus: boolean;
+}
+export interface TeamScore { team: typeof TEAMS[0]; squads: SquadScore[]; totalScore: number; rank?: number; }
+
+function buildRanking(squadResults: Record<NationName, SquadResult>): TeamScore[] {
+  return TEAMS.map(team => {
+    const squads: SquadScore[] = team.squads.map(nation => {
+      const r = squadResults[nation];
+      const coeff = COEFFICIENTS[nation] ?? 1;
+      if (!r) return { nation, coefficient: coeff, matchPoints: 0, bonusPoints: 0, totalBeforeCoeff: 0, finalScore: 0, hasGroupBonus: false, advanceCount: 0, hasFinalistBonus: false, hasChampionBonus: false };
+
+      const matchPoints = r.wins * 3 + r.draws;
+      const bonusPoints = (r.groupWin ? 3 : 0) + ((r.advance ?? 0) * 3) + (r.finalist ? 5 : 0) + (r.champion ? 15 : 0);
+      const finalScore = (matchPoints * coeff) + bonusPoints;
+
+      return { nation, coefficient: coeff, matchPoints, bonusPoints, totalBeforeCoeff: matchPoints + bonusPoints, finalScore, hasGroupBonus: r.groupWin, advanceCount: r.advance ?? 0, hasFinalistBonus: r.finalist, hasChampionBonus: r.champion };
+    });
+    return { team, squads, totalScore: squads.reduce((s, q) => s + q.finalScore, 0) };
+  }).sort((a, b) => b.totalScore - a.totalScore).map((ts, i) => ({ ...ts, rank: i + 1 }));
 }
 
-export const useGameStore = create<GameState>((set) => {
-  const getInitialResults = () => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('mundial_squad_results');
-      if (saved) {
-        try { return JSON.parse(saved); } catch (e) { console.error(e); }
-      }
-    }
-    return initialResults;
-  };
+interface GameStore {
+  matches: Match[];
+  squadResults: Record<NationName, SquadResult>;
+  ranking: TeamScore[];
+  lastUpdated: Date | null;
+  isLoading: boolean;
+  setSquadResults: (results: Record<NationName, SquadResult>) => void;
+  updateSquadResult: (nation: NationName, partial: Partial<SquadResult>) => void;
+  updateMatch: (id: number, homeScore: number, awayScore: number, status: Match['status']) => void;
+  setLoading: (v: boolean) => void;
+  setLastUpdated: (d: Date) => void;
+}
 
-  const startingResults = getInitialResults();
+export const useGameStore = create<GameStore>((set) => ({
+  matches: MATCHES,
+  squadResults: { ...SQUAD_RESULTS },
+  ranking: buildRanking(SQUAD_RESULTS),
+  lastUpdated: null,
+  isLoading: false,
 
-  return {
-    results: startingResults,
-    ranking: calculateScores(startingResults),
-    matches: [],
-    isLoading: false,
-    lastUpdated: null,
-    
-    updateSquadField: (nation, field, value) => set((state) => {
-      const updatedSquad = { ...state.results[nation], [field]: value };
-      const updatedResults = { ...state.results, [nation]: updatedSquad };
-      
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('mundial_squad_results', JSON.stringify(updatedResults));
-      }
+  setSquadResults: (results) => set({ squadResults: results, ranking: buildRanking(results) }),
 
-      return {
-        results: updatedResults,
-        ranking: calculateScores(updatedResults)
-      };
-    }),
+  updateSquadResult: (nation, partial) => set(state => {
+    const newResults = { ...state.squadResults, [nation]: { ...state.squadResults[nation], ...partial } };
+    return { squadResults: newResults, ranking: buildRanking(newResults) };
+  }),
 
-    // Unisce in modo sicuro i dati esistenti (inclusi i passaggi turno manuali dell'admin) con quelli parziali delle API
-    updateSquadResult: (nation, updatedData) => set((state) => {
-      const currentSquad = state.results[nation] || { wins: 0, draws: 0, losses: 0, groupWin: false, advance: 0 };
-      const updatedSquad = { ...currentSquad, ...updatedData };
-      const updatedResults = { ...state.results, [nation]: updatedSquad };
-      
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('mundial_squad_results', JSON.stringify(updatedResults));
-      }
-      return {
-        results: updatedResults,
-        ranking: calculateScores(updatedResults)
-      };
-    }),
+  updateMatch: (id, homeScore, awayScore, status) => set(state => ({
+    matches: state.matches.map(m => m.id === id ? { ...m, homeScore, awayScore, status } : m),
+  })),
 
-    updateMatch: (matchId, homeScore, awayScore, status) => set((state) => {
-      const updatedMatches = state.matches.map(m => 
-        m.id === matchId ? { ...m, homeScore, awayScore, status } : m
-      );
-      return { matches: updatedMatches };
-    }),
-
-    setLoading: (loading) => set({ isLoading: loading }),
-    setLastUpdated: (dateStr) => set({ lastUpdated: String(dateStr) }),
-
-    resetToZero: () => set(() => {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('mundial_squad_results', JSON.stringify(initialResults));
-      }
-      return {
-        results: initialResults,
-        ranking: calculateScores(initialResults),
-        isLoading: false,
-        lastUpdated: null
-      };
-    })
-  };
-});
+  setLoading: (v) => set({ isLoading: v }),
+  setLastUpdated: (d) => set({ lastUpdated: d }),
+}));

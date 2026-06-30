@@ -6,7 +6,7 @@ import { formatScore } from '@/lib/scoring';
 
 export function StatsTab() {
   const { ranking, matches } = useGameStore();
-  const maxScore = Math.max(...ranking.map((t: any) => t.totalScore), 1);
+  const maxScore = Math.max(...ranking.map(t => t.totalScore), 1);
   const played = matches.filter(m => m.status === 'FT').length;
   const upcoming = matches.filter(m => m.status === 'NS').length;
   const live = matches.filter(m => m.status === 'LIVE').length;
@@ -33,7 +33,7 @@ export function StatsTab() {
       </div>
 
       <p className="font-display text-sm tracking-widest text-[var(--muted)] mb-3">Rendimento Team</p>
-      {ranking.map((ts: any, i: number) => {
+      {ranking.map((ts, i) => {
         const pct = Math.round((ts.totalScore / maxScore) * 100);
         return (
           <div key={ts.team.id} className="rounded-xl p-4 mb-3"
@@ -52,9 +52,9 @@ export function StatsTab() {
                 style={{ width: `${pct}%`, background: teamColors[i] }} />
             </div>
             <div className="flex justify-between">
-              {ts.squads.map((sq: any) => (
+              {ts.squads.map(sq => (
                 <div key={sq.nation} className="flex flex-col items-center gap-1 flex-1">
-                  <span className="text-lg">{FLAGS[sq.nation as keyof typeof FLAGS] ?? '🏳'}</span>
+                  <span className="text-lg">{FLAGS[sq.nation] ?? '🏳'}</span>
                   <span className="font-display text-sm" style={{ color: teamColors[i] }}>
                     {formatScore(sq.finalScore)}
                   </span>
