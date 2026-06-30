@@ -6,12 +6,15 @@ interface GameState {
   results: Record<NationName, SquadResult>;
   ranking: any;
   matches: any[];
+  isLoading: boolean; // Aggiunto per fixare la riga 14 di page.tsx
+  lastUpdated: string | null; // Aggiunto per fixare la riga 14 di page.tsx
   updateSquadField: (nation: NationName, field: keyof SquadResult, value: any) => void;
+  setLoading: (loading: boolean) => void;
+  setLastUpdated: (dateStr: string) => void;
   resetToZero: () => void;
 }
 
 export const useGameStore = create<GameState>((set) => {
-  // Carica i dati salvati o usa quelli di partenza a zero
   const getInitialResults = () => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('mundial_squad_results');
@@ -27,7 +30,9 @@ export const useGameStore = create<GameState>((set) => {
   return {
     results: startingResults,
     ranking: calculateScores(startingResults),
-    matches: [], // Gestito dal hook API o mock
+    matches: [],
+    isLoading: false, // Stato iniziale
+    lastUpdated: null, // Stato iniziale
     
     updateSquadField: (nation, field, value) => set((state) => {
       const updatedSquad = { ...state.results[nation], [field]: value };
@@ -43,13 +48,18 @@ export const useGameStore = create<GameState>((set) => {
       };
     }),
 
+    setLoading: (loading) => set({ isLoading: loading }),
+    setLastUpdated: (dateStr) => set({ lastUpdated: dateStr }),
+
     resetToZero: () => set(() => {
       if (typeof window !== 'undefined') {
         localStorage.setItem('mundial_squad_results', JSON.stringify(initialResults));
       }
       return {
         results: initialResults,
-        ranking: calculateScores(initialResults)
+        ranking: calculateScores(initialResults),
+        isLoading: false,
+        lastUpdated: null
       };
     })
   };
