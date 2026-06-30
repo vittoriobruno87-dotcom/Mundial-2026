@@ -11,10 +11,11 @@ export interface SquadResult {
   advance: number;
 }
 
+// Struttura Match allineata con il tuo MatchesTab.tsx
 export interface Match {
   id: number;
-  homeTeam: NationName;
-  awayTeam: NationName;
+  home: NationName; // Modificato da homeTeam a home
+  away: NationName; // Modificato da awayTeam a away
   homeScore?: number;
   awayScore?: number;
   status: 'NS' | 'LIVE' | 'FT';
