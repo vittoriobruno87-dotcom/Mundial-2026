@@ -1,56 +1,63 @@
-import { SQUAD_RESULTS, TEAMS_DEFINITION, NationName } from './gameData';
+import { SQUAD_RESULTS, type SquadResult, type NationName, type TeamName } from './gameData';
 
-export interface TeamScore {
-  name: string;
-  points: number;
-  details: Record<string, number>;
+// Funzione di utilità per formattare il punteggio
+export function formatScore(score: number): string {
+  return score.toFixed(1).replace('.0', '');
 }
 
-// Funzione richiesta per colorare i pallini delle vostre squadre
-export function findNationOwner(nationName: string): string | null {
-  for (const [teamName, nations] of Object.entries(TEAMS_DEFINITION)) {
-    if (nations.includes(nationName)) {
-      return teamName;
+// Trova il proprietario di una nazione partendo dai dati statici
+export function findNationOwner(nation: NationName): TeamName {
+  for (const [team, data] of Object.entries(SQUAD_RESULTS)) {
+    // Cerchiamo se la nazione è presente nell'array delle squadre associate
+    // Nota: usiamo una ricerca difensiva per evitare crash in fase di build
+    const squads = (data as any).squads || [];
+    if (squads.includes(nation)) {
+      return team as TeamName;
     }
   }
-  return null;
+  return "Senza Proprietario" as TeamName;
 }
 
-// Funzione richiesta da RankingTab.tsx per formattare il testo dei punteggi
-export function formatScore(points: number): string {
-  return `${points} pt${points !== 1 ? 's' : ''}`;
-}
+export function calculateScores(results: Record<NationName, SquadResult>) {
+  // Controllo di sicurezza fondamentale per il prerendering di Next.js
+  if (!results || Object.keys(results).length === 0) {
+    return [];
+  }
 
-export function calculateScores(currentResults: typeof SQUAD_RESULTS) {
-  const POINTS_PER_WIN = 3;
-  const POINTS_PER_DRAW = 1;
-  const BONUS_GROUP_WIN = 5;
-  const BONUS_ADVANCE = 3; // Punti per CIASCUN passaggio del turno
+  // Mappa di supporto per aggregare i dati dei 4 partecipanti reali
+  const teamAggregates: Record<string, { id: string; name: string; totalScore: number; squads: any[] }> = {
+    'Vittorio': { id: 'vittorio', name: 'Vittorio', totalScore: 0, squads: [] },
+    'Andrea': { id: 'andrea', name: 'Andrea', totalScore: 0, squads: [] },
+    'Stefano': { id: 'stefano', name: 'Stefano', totalScore: 0, squads: [] },
+    'Albi': { id: 'albi', name: 'Albi', totalScore: 0, squads: [] }
+  };
 
-  const scores: Record<string, TeamScore> = {};
+  // Calcola i punti per ciascuna nazione e associala al rispettivo proprietario
+  for (const [nation, data] of Object.entries(results)) {
+    const wins = data.wins || 0;
+    const draws = data.draws || 0;
+    const losses = data.losses || 0;
+    const advance = data.advance || 0;
+    const groupWin = data.groupWin ? 1 : 0;
 
-  Object.entries(TEAMS_DEFINITION).forEach(([teamName, nations]) => {
-    let totalPoints = 0;
-    const details: Record<string, number> = {};
+    // Formula: 3pt vittoria, 1pt pareggio + 3pt vittoria girone + (5pt * numero passaggi turno)
+    const points = (wins * 3) + (draws * 1) + (groupWin * 3) + (advance * 5);
+    const owner = findNationOwner(nation as NationName);
 
-    nations.forEach((nation) => {
-      const res = currentResults[nation as NationName] || { wins: 0, draws: 0, losses: 0, groupWin: false, advance: 0 };
-      
-      const matchPoints = (res.wins * POINTS_PER_WIN) + (res.draws * POINTS_PER_DRAW);
-      const groupBonus = res.groupWin ? BONUS_GROUP_WIN : 0;
-      const advanceBonus = (res.advance || 0) * BONUS_ADVANCE; // Moltiplica per il numero di passaggi
+    if (teamAggregates[owner]) {
+      teamAggregates[owner].totalScore += points;
+      teamAggregates[owner].squads.push({
+        nation,
+        wins,
+        draws,
+        losses,
+        groupWin: data.groupWin,
+        advance,
+        score: points
+      });
+    }
+  }
 
-      const nationTotal = matchPoints + groupBonus + advanceBonus;
-      totalPoints += nationTotal;
-      details[nation] = nationTotal;
-    });
-
-    scores[teamName] = {
-      name: teamName,
-      points: totalPoints,
-      details
-    };
-  });
-
-  return scores;
+  // Restituisce l'array ordinato dal punteggio più alto al più basso per la classifica
+  return Object.values(teamAggregates).sort((a, b) => b.totalScore - a.totalScore);
 }
