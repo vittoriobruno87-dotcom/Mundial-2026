@@ -9,8 +9,8 @@ interface GameState {
   isLoading: boolean;
   lastUpdated: string | null;
   updateSquadField: (nation: NationName, field: keyof SquadResult, value: any) => void;
-  updateSquadResult: (nation: NationName, updatedData: SquadResult) => void; // Aggiunto alias per useFootballData.ts
-  updateMatch: (matchId: number, updatedFields: any) => void; // Aggiunto per evitare errori futuri su updateMatch
+  updateSquadResult: (nation: NationName, updatedData: SquadResult) => void;
+  updateMatch: (matchId: number, homeScore: number, awayScore: number, status: 'NS' | 'LIVE' | 'FT') => void; // Allineato a 4 argomenti
   setLoading: (loading: boolean) => void;
   setLastUpdated: (dateStr: string) => void;
   resetToZero: () => void;
@@ -50,7 +50,6 @@ export const useGameStore = create<GameState>((set) => {
       };
     }),
 
-    // Implementazione dell'alias richiesto alla riga 18 di useFootballData.ts
     updateSquadResult: (nation, updatedData) => set((state) => {
       const updatedResults = { ...state.results, [nation]: updatedData };
       if (typeof window !== 'undefined') {
@@ -62,9 +61,11 @@ export const useGameStore = create<GameState>((set) => {
       };
     }),
 
-    // Semplice mock per updateMatch richiesto da useFootballData per evitare errori di compilazione
-    updateMatch: (matchId, updatedFields) => set((state) => {
-      const updatedMatches = state.matches.map(m => m.id === matchId ? { ...m, ...updatedFields } : m);
+    // Implementazione corretta a 4 argomenti per rispondere alla riga 51 di useFootballData.ts
+    updateMatch: (matchId, homeScore, awayScore, status) => set((state) => {
+      const updatedMatches = state.matches.map(m => 
+        m.id === matchId ? { ...m, homeScore, awayScore, status } : m
+      );
       return { matches: updatedMatches };
     }),
 
@@ -79,6 +80,11 @@ export const useGameStore = create<GameState>((set) => {
         results: initialResults,
         ranking: calculateScores(initialResults),
         isLoading: false,
+        lastUpdated: null
+      };
+    })
+  };
+});
         lastUpdated: null
       };
     })
