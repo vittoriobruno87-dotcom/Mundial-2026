@@ -10,8 +10,23 @@ export interface SquadResult {
   draws: number;
   losses: number;
   groupWin: boolean;
-  advance: number; // Modificato da boolean a number per passaggi multipli
+  advance: number;
 }
+
+export const FLAGS: Record<NationName, string> = {
+  'Canada': '🇨🇦',
+  'Spagna': '🇪🇸',
+  'Giappone': '🇯🇵',
+  'Marocco': '🇲🇦',
+  'Messico': '🇲🇽',
+  'Germania': '🇩🇪',
+  'Svizzera': '🇨🇭',
+  'Brasile': '🇧🇷',
+  'USA': '🇺🇸',
+  'Portogallo': '🇵🇹',
+  'Norvegia': '🇳🇴',
+  'Belgio': '🇧🇪'
+};
 
 export const SQUAD_RESULTS: Record<NationName, SquadResult> = {
   'Canada':     { wins: 0, draws: 0, losses: 0, groupWin: false, advance: 0 },
