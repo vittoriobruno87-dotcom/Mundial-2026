@@ -52,9 +52,9 @@ export function StatsTab() {
                 style={{ width: `${pct}%`, background: teamColors[i] }} />
             </div>
             <div className="flex justify-between">
-              {ts.squads.map(sq => (
+              {ts.squads.map((sq: any) => (
                 <div key={sq.nation} className="flex flex-col items-center gap-1 flex-1">
-                  <span className="text-lg">{FLAGS[sq.nation] ?? '🏳'}</span>
+                  <span className="text-lg">{FLAGS[sq.nation as keyof typeof FLAGS] ?? '🏳'}</span>
                   <span className="font-display text-sm" style={{ color: teamColors[i] }}>
                     {formatScore(sq.finalScore)}
                   </span>
