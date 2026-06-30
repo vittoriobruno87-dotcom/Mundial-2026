@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Abilita output statico per Vercel/Netlify
-  // output: 'export', // decommentare solo per deploy statico puro
-
-  // Headers di sicurezza
   async headers() {
     return [
       {

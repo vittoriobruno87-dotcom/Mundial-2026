@@ -1,7 +1,3 @@
-// ============================================================
-// COMPONENTE: Partite
-// ============================================================
-
 'use client';
 
 import { useGameStore } from '@/store/gameStore';
@@ -11,7 +7,6 @@ import { findNationOwner } from '@/lib/scoring';
 export function MatchesTab() {
   const { matches } = useGameStore();
 
-  // Raggruppa per fase
   const groups: Record<string, Match[]> = {};
   matches.forEach(m => {
     if (!groups[m.group]) groups[m.group] = [];
@@ -45,7 +40,6 @@ export function MatchesTab() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  {/* Home */}
                   <div className="flex flex-col items-center gap-1 flex-1">
                     <span className="text-2xl">{FLAGS[m.home] ?? '🏳'}</span>
                     <span className="text-[10px] text-[var(--muted)] text-center">
@@ -56,7 +50,6 @@ export function MatchesTab() {
                     </span>
                   </div>
 
-                  {/* Score */}
                   <div className="flex items-center gap-2 px-3">
                     <span className="font-display text-3xl min-w-[22px] text-center">
                       {m.homeScore !== null ? m.homeScore : '-'}
@@ -67,7 +60,6 @@ export function MatchesTab() {
                     </span>
                   </div>
 
-                  {/* Away */}
                   <div className="flex flex-col items-center gap-1 flex-1">
                     <span className="text-2xl">{FLAGS[m.away] ?? '🏳'}</span>
                     <span className="text-[10px] text-[var(--muted)] text-center">
@@ -79,7 +71,6 @@ export function MatchesTab() {
                   </div>
                 </div>
 
-                {/* Status */}
                 <div className="text-center mt-2">
                   {m.status === 'FT' && (
                     <span className="text-[10px] px-3 py-1 rounded-full font-semibold"

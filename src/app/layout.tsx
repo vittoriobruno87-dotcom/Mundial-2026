@@ -1,7 +1,3 @@
-// ============================================================
-// LAYOUT PRINCIPALE
-// ============================================================
-
 import type { Metadata, Viewport } from 'next';
 import { Bebas_Neue, DM_Sans } from 'next/font/google';
 import './globals.css';
