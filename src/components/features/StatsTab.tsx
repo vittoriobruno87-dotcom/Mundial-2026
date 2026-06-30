@@ -6,7 +6,7 @@ import { formatScore } from '@/lib/scoring';
 
 export function StatsTab() {
   const { ranking, matches } = useGameStore();
-  const maxScore = Math.max(...ranking.map(t => t.totalScore), 1);
+  const maxScore = Math.max(...ranking.map((t: any) => t.totalScore), 1);
   const played = matches.filter(m => m.status === 'FT').length;
   const upcoming = matches.filter(m => m.status === 'NS').length;
   const live = matches.filter(m => m.status === 'LIVE').length;
