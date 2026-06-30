@@ -33,7 +33,7 @@ export function StatsTab() {
       </div>
 
       <p className="font-display text-sm tracking-widest text-[var(--muted)] mb-3">Rendimento Team</p>
-      {ranking.map((ts, i) => {
+      {ranking.map((ts: any, i: number) => {
         const pct = Math.round((ts.totalScore / maxScore) * 100);
         return (
           <div key={ts.team.id} className="rounded-xl p-4 mb-3"
