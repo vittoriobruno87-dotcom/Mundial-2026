@@ -11,16 +11,17 @@ export interface SquadResult {
   advance: number;
 }
 
-// Struttura Match allineata con il tuo MatchesTab.tsx
+// Struttura Match completa di tutte le proprietà richieste dal componente MatchesTab.tsx
 export interface Match {
   id: number;
-  home: NationName; // Modificato da homeTeam a home
-  away: NationName; // Modificato da awayTeam a away
+  home: NationName;
+  away: NationName;
   homeScore?: number;
   awayScore?: number;
   status: 'NS' | 'LIVE' | 'FT';
   date: string;
   group: string;
+  minute?: number; // Aggiunto per tracciare i minuti delle partite LIVE
 }
 
 export const FLAGS: Record<NationName, string> = {
