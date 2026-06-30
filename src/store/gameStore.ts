@@ -10,7 +10,7 @@ interface GameState {
   lastUpdated: string | null;
   updateSquadField: (nation: NationName, field: keyof SquadResult, value: any) => void;
   updateSquadResult: (nation: NationName, updatedData: SquadResult) => void;
-  updateMatch: (matchId: number, homeScore: number, awayScore: number, status: 'NS' | 'LIVE' | 'FT') => void; // Allineato a 4 argomenti
+  updateMatch: (matchId: number, homeScore: number, awayScore: number, status: 'NS' | 'LIVE' | 'FT') => void;
   setLoading: (loading: boolean) => void;
   setLastUpdated: (dateStr: string) => void;
   resetToZero: () => void;
@@ -61,7 +61,6 @@ export const useGameStore = create<GameState>((set) => {
       };
     }),
 
-    // Implementazione corretta a 4 argomenti per rispondere alla riga 51 di useFootballData.ts
     updateMatch: (matchId, homeScore, awayScore, status) => set((state) => {
       const updatedMatches = state.matches.map(m => 
         m.id === matchId ? { ...m, homeScore, awayScore, status } : m
@@ -80,11 +79,6 @@ export const useGameStore = create<GameState>((set) => {
         results: initialResults,
         ranking: calculateScores(initialResults),
         isLoading: false,
-        lastUpdated: null
-      };
-    })
-  };
-});
         lastUpdated: null
       };
     })
