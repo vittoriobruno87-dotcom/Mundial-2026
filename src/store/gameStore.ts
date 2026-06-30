@@ -9,10 +9,10 @@ interface GameState {
   isLoading: boolean;
   lastUpdated: string | null;
   updateSquadField: (nation: NationName, field: keyof SquadResult, value: any) => void;
-  updateSquadResult: (nation: NationName, updatedData: SquadResult) => void;
+  updateSquadResult: (nation: NationName, updatedData: Partial<SquadResult>) => void; // Cambiato in Partial per accettare dati parziali dalle API
   updateMatch: (matchId: number, homeScore: number, awayScore: number, status: 'NS' | 'LIVE' | 'FT') => void;
   setLoading: (loading: boolean) => void;
-  setLastUpdated: (dateStr: string) => void;
+  setLastUpdated: (dateStr: any) => void;
   resetToZero: () => void;
 }
 
@@ -50,8 +50,12 @@ export const useGameStore = create<GameState>((set) => {
       };
     }),
 
+    // Unisce in modo sicuro i dati esistenti (inclusi i passaggi turno manuali dell'admin) con quelli parziali delle API
     updateSquadResult: (nation, updatedData) => set((state) => {
-      const updatedResults = { ...state.results, [nation]: updatedData };
+      const currentSquad = state.results[nation] || { wins: 0, draws: 0, losses: 0, groupWin: false, advance: 0 };
+      const updatedSquad = { ...currentSquad, ...updatedData };
+      const updatedResults = { ...state.results, [nation]: updatedSquad };
+      
       if (typeof window !== 'undefined') {
         localStorage.setItem('mundial_squad_results', JSON.stringify(updatedResults));
       }
@@ -69,7 +73,7 @@ export const useGameStore = create<GameState>((set) => {
     }),
 
     setLoading: (loading) => set({ isLoading: loading }),
-    setLastUpdated: (dateStr) => set({ lastUpdated: dateStr }),
+    setLastUpdated: (dateStr) => set({ lastUpdated: String(dateStr) }),
 
     resetToZero: () => set(() => {
       if (typeof window !== 'undefined') {
